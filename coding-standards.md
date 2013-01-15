@@ -11,107 +11,108 @@ Here are Vim rules for indenting:
 
 It is recommended to keep lines at approximately 75-85 characters long for better code readability.
 
-
-
-
-
 # Control Structures
 These include if, for, while, switch, etc. Here is an example if statement, since it is the most complicated of them:
 
-<?php
-if ((condition1) || (condition2)) {
-    action1;
-} elseif ((condition3) && (condition4)) {
-    action2;
-} else {
-    defaultaction;
-}
-?>
+    <?php
+    if ((condition1) || (condition2)) {
+        action1;
+    } elseif ((condition3) && (condition4)) {
+        action2;
+    } else {
+        defaultaction;
+    }
+    ?>
+
 Control statements should have one space between the control keyword and opening parenthesis, to distinguish them from function calls.
+
 You are strongly encouraged to always use curly braces even in situations where they are technically optional. Having them increases readability and decreases the likelihood of logic errors being introduced when new lines are added.
+
 For switch statements:
 
-<?php
-switch (condition) {
-case 1:
-    action1;
-    break;
+    <?php
+    switch (condition) {
+    case 1:
+        action1;
+        break;
+    
+    case 2:
+        action2;
+        break;
+    
+    default:
+        defaultaction;
+        break;
+    }
+    ?>
 
-case 2:
-    action2;
-    break;
+**Split long if statements onto several lines**
 
-default:
-    defaultaction;
-    break;
-}
-?>
-Split long if statements onto several lines
 Long if statements may be split onto several lines when the character/line limit would be exceeded. The conditions have to be positioned onto the following line, and indented 4 characters. The logical operators (&&, ||, etc.) should be at the beginning of the line to make it easier to comment (and exclude) the condition. The closing parenthesis and opening brace get their own line at the end of the conditions.
 
 Keeping the operators at the beginning of the line has two advantages: It is trivial to comment out a particular line during development while keeping syntactically correct code (except of course the first line). Further is the logic kept at the front where it's not forgotten. Scanning such conditions is very easy since they are aligned below each other.
 
-<?php
+    <?php
+    
+    if (($condition1
+        || $condition2)
+        && $condition3
+        && $condition4
+    ) {
+        //code here
+    }
+    ?>
+    The first condition may be aligned to the others.
+    
+    <?php
+    
+    if (   $condition1
+        || $condition2
+        || $condition3
+    ) {
+        //code here
+    }
+    ?>
 
-if (($condition1
-    || $condition2)
-    && $condition3
-    && $condition4
-) {
-    //code here
-}
-?>
-The first condition may be aligned to the others.
-
-<?php
-
-if (   $condition1
-    || $condition2
-    || $condition3
-) {
-    //code here
-}
-?>
 The best case is of course when the line does not need to be split. When the if clause is really long enough to be split, it might be better to simplify it. In such cases, you could express conditions as variables an compare them in the if() condition. This has the benefit of "naming" and splitting the condition sets into smaller, better understandable chunks:
 
-<?php
+    <?php
+    
+    $is_foo = ($condition1 || $condition2);
+    $is_bar = ($condition3 && $condtion4);
+    if ($is_foo && $is_bar) {
+        // ....
+    }
+    ?>
 
-$is_foo = ($condition1 || $condition2);
-$is_bar = ($condition3 && $condtion4);
-if ($is_foo && $is_bar) {
-    // ....
-}
-?>
 There were suggestions to indent the parantheses "groups" by 1 space for each grouping. This is too hard to achieve in your coding flow, since your tab key always produces 4 spaces. Indenting the if clauses would take too much finetuning.
 
-Ternary operators
+**Ternary operators**
+
 The same rule as for if clauses also applies for the ternary operator: It may be split onto several lines, keeping the question mark and the colon at the front.
 
-<?php
-
-$a = $condition1 && $condition2
-    ? $foo : $bar;
-
-$b = $condition3 && $condition4
-    ? $foo_man_this_is_too_long_what_should_i_do
-    : $bar;
-?>
-
-
-
+    <?php
+    
+    $a = $condition1 && $condition2
+        ? $foo : $bar;
+    
+    $b = $condition3 && $condition4
+        ? $foo_man_this_is_too_long_what_should_i_do
+        : $bar;
+    ?>
 
 # Function Calls
 Functions should be called with no spaces between the function name, the opening parenthesis, and the first parameter; spaces between commas and each parameter, and no space between the last parameter, the closing parenthesis, and the semicolon. Here's an example:
 
-<?php
-$var = foo($bar, $baz, $quux);
-?>
-As displayed above, there should be one space on either side of an equals sign used to assign the return value of a function to a variable. In the case of a block of related assignments, more space may be inserted to promote readability:
-
-<?php
-$short         = foo($bar);
-$long_variable = foo($baz);
-?>
+    <?php
+    $var = foo($bar, $baz, $quux);
+    ?>
+    As displayed above, there should be one space on either side of an equals sign used to assign the return value of a function to a variable. In the case of a block of related assignments, more space may be inserted to promote readability:
+    
+    <?php
+    $short         = foo($bar);
+    $long_variable = foo($baz);
+    ?>
 To support readability, parameters in subsequent calls to the same function/method may be aligned by parameter name:
 
 <?php
@@ -120,146 +121,146 @@ $this->callSomeFunction('param1',     'second',        true);
 $this->callSomeFunction('parameter2', 'third',         false);
 $this->callSomeFunction('3',          'verrrrrrylong', true);
 ?>
-Split function call on several lines
+
+**Split function call on several lines**
+
 The CS require lines to have a maximum length of 80 chars. Calling functions or methods with many parameters while adhering to CS is impossible in that cases. It is allowed to split parameters in function calls onto several lines.
 
-<?php
+    <?php
+    
+    $this->someObject->subObject->callThisFunctionWithALongName(
+        $parameterOne, $parameterTwo,
+        $aVeryLongParameterThree
+    );
+    ?>
 
-$this->someObject->subObject->callThisFunctionWithALongName(
-    $parameterOne, $parameterTwo,
-    $aVeryLongParameterThree
-);
-?>
 Several parameters per line are allowed. Parameters need to be indented 4 spaces compared to the level of the function call. The opening parenthesis is to be put at the end of the function call line, the closing parenthesis gets its own line at the end of the parameters. This shows a visual end to the parameter indentations and follows the opening/closing brace rules for functions and conditionals.
 
 The same applies not only for parameter variables, but also for nested function calls and for arrays.
 
-<?php
-
-$this->someObject->subObject->callThisFunctionWithALongName(
-    $this->someOtherFunc(
-        $this->someEvenOtherFunc(
-            'Help me!',
-            array(
-                'foo'  => 'bar',
-                'spam' => 'eggs',
+    <?php
+    
+    $this->someObject->subObject->callThisFunctionWithALongName(
+        $this->someOtherFunc(
+            $this->someEvenOtherFunc(
+                'Help me!',
+                array(
+                    'foo'  => 'bar',
+                    'spam' => 'eggs',
+                ),
+                23
             ),
-            23
+            $this->someEvenOtherFunc()
         ),
-        $this->someEvenOtherFunc()
-    ),
-    $this->wowowowowow(12)
-);
-?>
+        $this->wowowowowow(12)
+    );
+    ?>
+
 Nesting those function parameters is allowed if it helps to make the code more readable, not only when it is necessary when the characters per line limit is reached.
 
 Using fluent application programming interfaces often leads to many concatenated function calls. Those calls may be split onto several lines. When doing this, all subsequent lines are indented by 4 spaces and begin with the "->" arrow.
 
-<?php
+    <?php
+    
+    $someObject->someFunction("some", "parameter")
+        ->someOtherFunc(23, 42)
+        ->andAThirdFunction();
+    ?>
 
-$someObject->someFunction("some", "parameter")
-    ->someOtherFunc(23, 42)
-    ->andAThirdFunction();
-?>
-Alignment of assignments
+**Alignment of assignments**
+
 To support readability, the equal signs may be aligned in block-related assignments:
 
-<?php
+    <?php
+    
+    $short  = foo($bar);
+    $longer = foo($baz);
+    ?>
 
-$short  = foo($bar);
-$longer = foo($baz);
-?>
 The rule can be broken when the length of the variable name is at least 8 characters longer/shorter than the previous one:
 
-<?php
+    <?php
+    
+    $short = foo($bar);
+    $thisVariableNameIsVeeeeeeeeeeryLong = foo($baz);
+    ?>
 
-$short = foo($bar);
-$thisVariableNameIsVeeeeeeeeeeryLong = foo($baz);
-?>
-Split long assigments onto several lines
+**Split long assigments onto several lines**
+
 Assigments may be split onto several lines when the character/line limit would be exceeded. The equal sign has to be positioned onto the following line, and indented by 4 characters.
 
-<?php
-
-$GLOBALS['TSFE']->additionalHeaderData[$this->strApplicationName]
-    = $this->xajax->getJavascript(t3lib_extMgm::siteRelPath('nr_xajax'));
-?>
-
-
-
+    <?php
+    
+    $GLOBALS['TSFE']->additionalHeaderData[$this->strApplicationName]
+        = $this->xajax->getJavascript(t3lib_extMgm::siteRelPath('nr_xajax'));
+    ?>
 
 # Class Definitions
 Class declarations have their opening brace on a new line:
 
-<?php
-class Foo_Bar
-{
-
-    //... code goes here
-
-}
-?>
-
-
-
+    <?php
+    class Foo_Bar
+    {
+    
+        //... code goes here
+    
+    }
+    ?>
 
 # Function Definitions
 Function declarations follow the "K&R style":
 
-<?php
-function fooFunction($arg1, $arg2 = '')
-{
-    if (condition) {
-        statement;
+    <?php
+    function fooFunction($arg1, $arg2 = '')
+    {
+        if (condition) {
+            statement;
+        }
+        return $val;
     }
-    return $val;
-}
-?>
+    ?>
+
 Arguments with default values go at the end of the argument list. Always attempt to return a meaningful value from a function if one is appropriate. Here is a slightly longer example:
 
-<?php
-function connect(&$dsn, $persistent = false)
-{
-    if (is_array($dsn)) {
-        $dsninfo = &$dsn;
-    } else {
-        $dsninfo = DB::parseDSN($dsn);
+    <?php
+    function connect(&$dsn, $persistent = false)
+    {
+        if (is_array($dsn)) {
+            $dsninfo = &$dsn;
+        } else {
+            $dsninfo = DB::parseDSN($dsn);
+        }
+    
+        if (!$dsninfo || !$dsninfo['phptype']) {
+            return $this->raiseError();
+        }
+    
+        return true;
     }
+    ?>
 
-    if (!$dsninfo || !$dsninfo['phptype']) {
-        return $this->raiseError();
-    }
-
-    return true;
-}
-?>
 Split function definitions onto several lines
 Functions with many parameters may need to be split onto several lines to keep the 80 characters/line limit. The first parameters may be put onto the same line as the function name if there is enough space. Subsequent parameters on following lines are to be indented 4 spaces. The closing parenthesis and the opening brace are to be put onto the next line, on the same indentation level as the "function" keyword.
 
-<?php
-
-function someFunctionWithAVeryLongName($firstParameter = 'something', $secondParameter = 'booooo',
-    $third = null, $fourthParameter = false, $fifthParameter = 123.12,
-    $sixthParam = true
-) {
-    //....
-?>
-
-
+    <?php
+    
+    function someFunctionWithAVeryLongName($firstParameter = 'something', $secondParameter = 'booooo',
+        $third = null, $fourthParameter = false, $fifthParameter = 123.12,
+        $sixthParam = true
+    ) {
+        //....
+    ?>
 
 # Arrays
 Assignments in arrays may be aligned. When splitting array definitions onto several lines, the last value may also have a trailing comma. This is valid PHP syntax and helps to keep code diffs minimal:
 
-<?php
-
-$some_array = array(
-    'foo'  => 'bar',
-    'spam' => 'ham',
-);
-?>
-
-
-
+    <?php
+    
+    $some_array = array(
+        'foo'  => 'bar',
+        'spam' => 'ham',
+    );
+    ?>
 
 # Comments
 Complete inline documentation comment blocks (docblocks) must be provided. Please read the Sample File and Header Comment Blocks sections of the Coding Standards to learn the specifics of writing docblocks for PEAR packages. Further information can be found on the phpDocumentor website.
@@ -268,92 +269,87 @@ Non-documentation comments are strongly encouraged. A general rule of thumb is t
 
 C style comments (/* */) and standard C++ comments (//) are both fine. Use of Perl/shell style comments (#) is discouraged.
 
-
-
 # Including Code
 Anywhere you are unconditionally including a class file, use require_once. Anywhere you are conditionally including a class file (for example, factory methods), use include_once. Either of these will ensure that class files are included only once. They share the same file list, so you don't need to worry about mixing them - a file included with require_once will not be included again by include_once.
 
 include_once and require_once are statements, not functions. Parentheses should not surround the subject filename.
 
-
-
 # PHP Code Tags
 Always use <?php ?> to delimit PHP code, not the <? ?> shorthand. This is required for PEAR compliance and is also the most portable way to include PHP code on differing operating systems and setups.
-
-
 
 # Header Comment Blocks
 All source code files in the PEAR repository shall contain a "page-level" docblock at the top of each file and a "class-level" docblock immediately above each class. Below are examples of such docblocks.
 
-<?php
+    <?php
+    
+    /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+    
+    /**
+     * Short description for file
+     *
+     * Long description for file (if any)...
+     *
+     * PHP version 5
+     *
+     * LICENSE: This source file is subject to version 3.01 of the PHP license
+     * that is available through the world-wide-web at the following URI:
+     * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+     * the PHP License and are unable to obtain it through the web, please
+     * send a note to license@php.net so we can mail you a copy immediately.
+     *
+     * @category   CategoryName
+     * @package    PackageName
+     * @author     Original Author <author@example.com>
+     * @author     Another Author <another@example.com>
+     * @copyright  1997-2005 The PHP Group
+     * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
+     * @version    SVN: $Id$
+     * @link       http://pear.php.net/package/PackageName
+     * @see        NetOther, Net_Sample::Net_Sample()
+     * @since      File available since Release 1.2.0
+     * @deprecated File deprecated in Release 2.0.0
+     */
+    
+    /*
+    * Place includes, constant defines and $_GLOBAL settings here.
+    * Make sure they have appropriate docblocks to avoid phpDocumentor
+    * construing they are documented by the page-level docblock.
+    */
+    
+    /**
+     * Short description for class
+     *
+     * Long description for class (if any)...
+     *
+     * @category   CategoryName
+     * @package    PackageName
+     * @author     Original Author <author@example.com>
+     * @author     Another Author <another@example.com>
+     * @copyright  1997-2005 The PHP Group
+     * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
+     * @version    Release: @package_version@
+     * @link       http://pear.php.net/package/PackageName
+     * @see        NetOther, Net_Sample::Net_Sample()
+     * @since      Class available since Release 1.2.0
+     * @deprecated Class deprecated in Release 2.0.0
+     */
+    class Foo_Bar
+    {
+    }
+    
+    ?>
 
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
-/**
- * Short description for file
- *
- * Long description for file (if any)...
- *
- * PHP version 5
- *
- * LICENSE: This source file is subject to version 3.01 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
- *
- * @category   CategoryName
- * @package    PackageName
- * @author     Original Author <author@example.com>
- * @author     Another Author <another@example.com>
- * @copyright  1997-2005 The PHP Group
- * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/PackageName
- * @see        NetOther, Net_Sample::Net_Sample()
- * @since      File available since Release 1.2.0
- * @deprecated File deprecated in Release 2.0.0
- */
-
-/*
-* Place includes, constant defines and $_GLOBAL settings here.
-* Make sure they have appropriate docblocks to avoid phpDocumentor
-* construing they are documented by the page-level docblock.
-*/
-
-/**
- * Short description for class
- *
- * Long description for class (if any)...
- *
- * @category   CategoryName
- * @package    PackageName
- * @author     Original Author <author@example.com>
- * @author     Another Author <another@example.com>
- * @copyright  1997-2005 The PHP Group
- * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
- * @version    Release: @package_version@
- * @link       http://pear.php.net/package/PackageName
- * @see        NetOther, Net_Sample::Net_Sample()
- * @since      Class available since Release 1.2.0
- * @deprecated Class deprecated in Release 2.0.0
- */
-class Foo_Bar
-{
-}
-
-?>
-Required Tags That Have Variable Content
-Short Descriptions
+## Required Tags That Have Variable Content
+### Short Descriptions
 Short descriptions must be provided for all docblocks. They should be a quick sentence, not the name of the item. Please read the Coding Standard's Sample File about how to write good descriptions.
 
-PHP Versions
+### PHP Versions
 One of the following must go in the page-level docblock:
 
 * PHP version 4
  * PHP version 5
  * PHP versions 4 and 5
-@license
+### @license
 There are several possible licenses. One of the following must be picked and placed in the page-level and class-level docblocks:
 
 * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
@@ -365,23 +361,23 @@ There are several possible licenses. One of the following must be picked and pla
  * @license   http://www.php.net/license/3_01.txt  PHP License 3.01
 For more information, see the PEAR Group's Licensing Announcement.
 
-@link
+### @link
 The following must be used in both the page-level and class-level docblocks. Of course, change "PackageName" to the name of your package. This ensures the generated documentation links back your package.
 
 * @link      http://pear.php.net/package/PackageName
-@author
+### @author
 There's no hard rule to determine when a new code contributor should be added to the list of authors for a given source file. In general, their changes should fall into the "substantial" category (meaning somewhere around 10% to 20% of code changes). Exceptions could be made for rewriting functions or contributing new logic.
 
 Simple code reorganization or bug fixes would not justify the addition of a new individual to the list of authors.
 
-@since
+### @since
 This tag is required when a file or class is added after the package's initial release. Do not use it in an initial release.
 
-@deprecated
+### @deprecated
 This tag is required when a file or class is no longer used but has been left in place for backwards compatibility.
 
-Optional Tags
-@copyright
+## Optional Tags
+### @copyright
 Feel free to apply whatever copyrights you desire. When formatting this tag, the year should be in four digit format and if a span of years is involved, use a hyphen between the earliest and latest year. The copyright holder can be you, a list of people, a company, the PHP Group, etc. Examples:
 
 * @copyright 2003 John Doe and Jennifer Buck
@@ -391,87 +387,41 @@ Feel free to apply whatever copyrights you desire. When formatting this tag, the
 License Summary
 If you are using the PHP License, use the summary text provided above. If another license is being used, please remove the PHP License summary. Feel free to substitute it with text appropriate to your license, though to keep things easy to locate, please preface the text with LICENSE: .
 
-@see
+### @see
 Add a @see tag when you want to refer users to other sections of the package's documentation. If you have multiple items, separate them with commas rather than adding multiple @see tags.
 
-Order and Spacing
+**Order and Spacing**
+
 To ease long term readability of PEAR source code, the text and tags must conform to the order and spacing provided in the example above. This standard is adopted from the JavaDoc standard.
 
-@package_version@ Usage
+**@package_version@ Usage**
 There are two ways to implement the @package_version@ replacements. The procedure depends on whether you write your own package.xml files or if you use the PackageFileManager.
 
 For those authoring package.xml files directly, add a <replace> element for each file. The XML for such would look something like this:
 
-<file name="Class.php">
-  <replace from="@package_version@" to="version" type="package-info" />
-</file>
+    <file name="Class.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+
 Maintainers using the PackageFileManager need to call addReplacement() for each file:
 
-<?php
-$pkg->addReplacement('filename.php', 'package-info',
-                     '@package_version@', 'version');
-?>
-Transition Policy
-Existing Small Packages
-Existing packages that have only a few files are required to adopt these docblocks before the next release.
-
-Existing Large Packages
-Existing packages with many files are encouraged to adopt the new headers as soon as possible. When such packages come out with a new major version upgrade, these docblocks must be implemented therein.
-
-New and Unreleased Packages
-New packages and existing packages which have no releases yet must include these docblocks before their first release.
-
-
-
-# Using SVN
-This section applies only to packages using SVN at svn.php.net.
-Include the $Id$ SVN keyword in each file.
-
-The rest of this section assumes that you have basic knowledge about SVN tags and branches.
-
-SVN tags are used to label which revisions of the files in your package belong to a given release. Below is a list of the required and suggested SVN tags:
-
-RELEASE_n_n_n
-(required) Used for tagging a release. If you don't use it, there's no way to go back and retrieve your package from the SVN server in the state it was in at the time of the release.
-QA_n_n_n
-(branch, optional) If you feel you need to roll out a release candidate before releasing, it's a good idea to make a branch for it so you can isolate the release and apply only those critical fixes before the actual release. Meanwhile, normal development may continue on the main trunk.
-MAINT_n_n_n
-(branch, optional) If you need to make "micro-releases" (for example 1.2.1 and so on after 1.2.0), you can use a branch for that too, if your main trunk is very active and you want only minor changes between your micro-releases.
-Only the RELEASE tag is required, the rest are recommended for your convenience.
-
-Below is an example of how to tag the 1.2.0 release of the Money_Fast package:
-
-      $ svn copy https://svn.php.net/repository/pear/packages/Money_Fast/trunk  https://svn.php.net/repository/pear/packages/Money_Fast/tags/RELEASE_1_2_0
-     
-By doing this you make it possible for the PEAR web site to take you through the rest of your release process.
-
-Here's an example of how to create a QA branch:
-
-$ svn copy https://svn.php.net/repository/pear/packages/Money_Fast/trunk https://svn.php.net/repository/pear/packages/Money_Fast/branches/QA_2_0_0
-...
-$ svn copy https://svn.php.net/repository/pear/packages/Money_Fast/branches/QA_2_0_0 https://svn.php.net/repository/pear/packages/Money_Fast/tags/RELEASE_2_0_0RC1
-...and then the actual release, from the same branch:
-$ svn copy https://svn.php.net/repository/pear/packages/Money_Fast/branches/QA_2_0_0 https://svn.php.net/repository/pear/packages/Money_Fast/tags/RELEASE_2_0_0
-
-
-
-
-# Example URLs
-Use example.com, example.org and example.net for all example URLs and email addresses, per RFC 2606.
-
+    <?php
+    $pkg->addReplacement('filename.php', 'package-info',
+                         '@package_version@', 'version');
+    ?>
 
 # Naming Conventions
-Global Variables and Functions
+## Global Variables and Functions
 If your package needs to define global variables, their names should start with a single underscore followed by the package name and another underscore. For example, the PEAR package uses a global variable called $_PEAR_destructor_object_list.
 
 Global functions should be named using the "studly caps" style (also referred to as "bumpy case" or "camel caps"). In addition, they should have the package name as a prefix, to avoid name collisions between packages. The initial letter of the name (after the prefix) is lowercase, and each letter that starts a new "word" is capitalized. An example:
 
 XML_RPC_serializeData()
-Classes
+##Classes
 Classes should be given descriptive names. Avoid using abbreviations where possible. Class names should always begin with an uppercase letter. The PEAR class hierarchy is also reflected in the class name, each level of the hierarchy separated with a single underscore. Examples of good class names are:
 
 Log	Net_Finger	HTML_Upload_Error
-Class Variables and Methods
+##Class Variables and Methods
 Class variables (a.k.a properties) and methods should be named using the "studly caps" style (also referred to as "bumpy case" or "camel caps"). Some examples (these would be "public" members):
 
 $counter	connect()	getData()	buildSomeWidget()
@@ -482,13 +432,11 @@ The following applies to PHP5.
 Protected class members are not preceded by a single underscore. For example:
 
 protected $somevar	protected function initTree()
-Constants
+## Constants
 Constants should always be all-uppercase, with underscores to separate words. Prefix constant names with the uppercased name of the class/package they are used in. Some examples:
 
 DB_DATASOURCENAME	SERVICES_AMAZON_S3_LICENSEKEY
 The true, false and null constants are excepted from the all-uppercase rule, and must always be lowercase.
-
-
 
 # File Formats
 All scripts contributed to PEAR must:
@@ -505,103 +453,99 @@ Be Unix formatted
 
 2) There should be one line feed after the closing PHP tag (?>). This means that when the cursor is at the very end of the file, it should be one line below the closing PHP tag.
 
-
-
 # E_STRICT-compatible code
 Starting on 01 January 2007, all new code that is suggested for inclusion into PEAR must be E_STRICT-compatible. This means that it must not produce any warnings or errors when PHP's error reporting level is set to E_ALL | E_STRICT.
-
-The development of existing packages that are not E_STRICT-compatible can continue as usual. If however a new major version of the package is released, this major version must then be E_STRICT-compatible.
-
-More details on this part of the Coding Standards can be found in the corresponding RFC.
-
 
 # Error Handling Guidelines
 This part of the Coding Standards describes how errors are handled in PEAR packages that are developed for PHP 5 and 6. It uses Exceptions, introduced in PHP 5.0 with Zend Engine 2, as the error handling mechanism.
 
-Definition of an error
+## Definition of an error
 An error is defined as an unexpected, invalid program state from which it is impossible to recover. For the sake of definition, recovery scope is defined as the method scope. Incomplete recovery is considered a recovery.
 
 One pretty straightforward example for an error
 
-<?php
-/*
- * Connect to Specified Database
- *
- * @throws Example_Datasource_Exception when it can't connect
- * to specified DSN.
- */
-function connectDB($dsn)
-{
-    $this->db =& DB::connect($dsn);
-    if (DB::isError($this->db)) {
-        throw new Example_Datasource_Exception(
-                "Unable to connect to $dsn:" . $this->db->getMessage()
-        );
-    }
-}
-?>
-In this example the objective of the method is to connect to the given DSN. Since it can't do anything but ask PEAR DB to do it, whenever DB returns an error, the only option is to bail out and launch the exception.
-
-Error handling with recovery
-
-<?php
-/*
- * Connect to one of the possible databases
- *
- * @throws Example_Datasource_Exception when it can't connect to
- * any of the configured databases.
- *
- * @throws Example_Config_Exception when it can't find databases
- * in the configuration.
- */
-
-function connect(Config $conf)
-{
-    $dsns =& $conf->searchPath(array('config', 'db'));
-    if ($dsns === FALSE) throw new Example_Config_Exception(
-        'Unable to find config/db section in configuration.'
-    );
-
-    $dsns =& $dsns->toArray();
-
-    foreach($dsns as $dsn) {
-        try {
-            $this->connectDB($dsn);
-            return;
-        } catch (Example_Datasource_Exception $e) {
-            // Some warning/logging code recording the failure
-            // to connect to one of the databases
+    <?php
+    /*
+     * Connect to Specified Database
+     *
+     * @throws Example_Datasource_Exception when it can't connect
+     * to specified DSN.
+     */
+    function connectDB($dsn)
+    {
+        $this->db =& DB::connect($dsn);
+        if (DB::isError($this->db)) {
+            throw new Example_Datasource_Exception(
+                    "Unable to connect to $dsn:" . $this->db->getMessage()
+            );
         }
     }
-    throw new Example_Datasource_Exception(
-        'Unable to connect to any of the configured databases'
-    );
-}
-?>
+    ?>
+
+In this example the objective of the method is to connect to the given DSN. Since it can't do anything but ask PEAR DB to do it, whenever DB returns an error, the only option is to bail out and launch the exception.
+
+## Error handling with recovery
+
+    <?php
+    /*
+     * Connect to one of the possible databases
+     *
+     * @throws Example_Datasource_Exception when it can't connect to
+     * any of the configured databases.
+     *
+     * @throws Example_Config_Exception when it can't find databases
+     * in the configuration.
+     */
+    
+    function connect(Config $conf)
+    {
+        $dsns =& $conf->searchPath(array('config', 'db'));
+        if ($dsns === FALSE) throw new Example_Config_Exception(
+            'Unable to find config/db section in configuration.'
+        );
+    
+        $dsns =& $dsns->toArray();
+    
+        foreach($dsns as $dsn) {
+            try {
+                $this->connectDB($dsn);
+                return;
+            } catch (Example_Datasource_Exception $e) {
+                // Some warning/logging code recording the failure
+                // to connect to one of the databases
+            }
+        }
+        throw new Example_Datasource_Exception(
+            'Unable to connect to any of the configured databases'
+        );
+    }
+    ?>
+
 This second example shows an exception being caught and recovered from. Although the lower level connectDB() method is unable to do anything but throw an error when one database connection fails, the upper level connect() method knows the object can go by with any one of the configured databases. Since the error was recovered from, the exception is silenced at this level and not rethrown.
 
-Incomplete recovery
+## Incomplete recovery
 
-<?php
-/*
- * loadConfig parses the provided configuration. If the configuration
- * is invalid, it will set the configuration to the default config.
- *
- */
-function loadConfig(Config $conf)
-{
-    try {
-        $this->config = $conf->parse();
-    } catch (Config_Parse_Exception $e) {
-        // Warn/Log code goes here
-        // Perform incomplete recovery
-        $this->config = $this->defaultConfig;
+    <?php
+    /*
+     * loadConfig parses the provided configuration. If the configuration
+     * is invalid, it will set the configuration to the default config.
+     *
+     */
+    function loadConfig(Config $conf)
+    {
+        try {
+            $this->config = $conf->parse();
+        } catch (Config_Parse_Exception $e) {
+            // Warn/Log code goes here
+            // Perform incomplete recovery
+            $this->config = $this->defaultConfig;
+        }
     }
-}
-?>
+    ?>
+
 The recovery produces side effects, so it is considered incomplete. However, the program may proceed, so the exception is considered handled, and must not be rethrown. As in the previous example, when silencing the exception, logging or warning should occur.
 
-Error Signaling in PHP 5 PEAR packages
+## Error Signaling in PHP 5 PEAR packages
 Error conditions in PEAR packages written for PHP 5 must be signaled using exceptions. Usage of return codes or return PEAR_Error objects is deprecated in favor of exceptions. Naturally, packages providing compatibility with PHP 4 do not fall under these coding guidelines, and may thus use the error handling mechanisms defined in the PHP 4 PEAR coding guidelines.
 
 An exception should be thrown whenever an error condition is met, according to the definition provided in the previous section. The thrown exception should contain enough information to debug the error and quickly identify the error cause. Note that, during production runs, no exception should reach the end-user, so there is no need for concern about technical complexity in the exception error messages.
@@ -610,59 +554,63 @@ The basic PEAR_Exception contains a textual error, describing the program state 
 
 The kind of information to be included in the exception is dependent on the error condition. From the point of view of exception throwing, there are three classes of error conditions:
 
-Errors detected during precondition checks
+## Errors detected during precondition checks
 Lower level library errors signaled via error return codes or error return objects
 Uncorrectable lower library exceptions
 Errors detected during precondition checks should contain a description of the failed check. If possible, the description should contain the violating value. Naturally, no wrapped exception can be included, as there isn't a lower level cause of the error. Example:
 
-<?php
-function divide($x, $y)
-{
-    if ($y == 0) {
-        throw new Example_Aritmetic_Exception('Division by zero');
+    <?php
+    function divide($x, $y)
+    {
+        if ($y == 0) {
+            throw new Example_Aritmetic_Exception('Division by zero');
+        }
     }
-}
-?>
+    ?>
+
 Errors signaled via return codes by lower level libraries, if unrecoverable, should be turned into exceptions. The error description should try to convey all information contained in the original error. One example, is the connect method previously presented:
 
-<?php
-/*
- * Connect to Specified Database
- *
- * @throws Example_Datasource_Exception when it can't connect to specified DSN.
- */
-function connectDB($dsn)
-{
-    $this->db =& DB::connect($dsn);
-    if (DB::isError($this->db)) {
-        throw new Example_Datasource_Exception(
-                "Unable to connect to $dsn:" . $this->db->getMessage()
-        );
+    <?php
+    /*
+     * Connect to Specified Database
+     *
+     * @throws Example_Datasource_Exception when it can't connect to specified DSN.
+     */
+    function connectDB($dsn)
+    {
+        $this->db =& DB::connect($dsn);
+        if (DB::isError($this->db)) {
+            throw new Example_Datasource_Exception(
+                    "Unable to connect to $dsn:" . $this->db->getMessage()
+            );
+        }
     }
-}
-?>
+    ?>
+
 Lower library exceptions, if they can't be corrected, should either be rethrown or bubbled up. When rethrowing, the original exception must be wrapped inside the one being thrown. When letting the exception bubble up, the exception just isn't handled and will continue up the call stack in search of a handler.
 
-Rethrowing an exception
+## Rethrowing an exception
 
-<?php
-function preTaxPrice($retailPrice, $taxRate)
-{
-    try {
-        return $this->divide($retailPrice, 1 + $taxRate);
-    } catch (Example_Aritmetic_Exception $e) {
-        throw new Example_Tax_Exception('Invalid tax rate.', $e);
+    <?php
+    function preTaxPrice($retailPrice, $taxRate)
+    {
+        try {
+            return $this->divide($retailPrice, 1 + $taxRate);
+        } catch (Example_Aritmetic_Exception $e) {
+            throw new Example_Tax_Exception('Invalid tax rate.', $e);
+        }
     }
-}
-?>
-Letting exceptions bubble up
+    ?>
 
-<?php
-function preTaxPrice($retailPrice, $taxRate)
-{
-    return $this->divide($retailPrice, 1 + $taxRate);
-}
-?>
+## Letting exceptions bubble up
+
+    <?php
+    function preTaxPrice($retailPrice, $taxRate)
+    {
+        return $this->divide($retailPrice, 1 + $taxRate);
+    }
+    ?>
+
 The case between rethrowing or bubbling up is one of software architecture: Exceptions should be bubbled up, except in these two cases:
 
 The original exception is from another package. Letting it bubble up would cause implementation details to be exposed, violating layer abstraction, conducing to poor design.
@@ -674,67 +622,71 @@ This requirement is equivalent to requiring that exceptions be thrown only on er
 
 One example of a method that wrongly uses the bubble up capability of exceptions to return a result from a deep recursion:
 
-<?php
-/**
- * Recursively search a tree for string.
- * @throws ResultException
- */
-public function search(TreeNode $node, $data)
-{
-    if ($node->data === $data) {
-        throw new ResultException( $node );
-    } else {
-        search( $node->leftChild, $data );
-        search( $node->rightChild, $data );
+    <?php
+    /**
+     * Recursively search a tree for string.
+     * @throws ResultException
+     */
+    public function search(TreeNode $node, $data)
+    {
+        if ($node->data === $data) {
+            throw new ResultException( $node );
+        } else {
+            search( $node->leftChild, $data );
+            search( $node->rightChild, $data );
+        }
     }
-}
-?>
+    ?>
+
 In the example the ResultException is simply using the "eject!" qualities of exception handling to jump out of deeply nested recursion. When actually used to signify an error this is a very powerful feature, but in the example above this is simply lazy development.
 
-Exception class hierarchies
+## Exception class hierarchies
 All of PEAR packages exceptions must be descendant from PEAR_Exception. PEAR_Exception provides exception wrapping abilities, absent from the top level PHP Exception class, and needed to comply with the previous section requirements.
 
 Additionally, each PEAR package must provide a top level exception, named <Package_Name>_Exception. It is considered best practice that the package never throws exceptions that aren't descendant from its top level exception.
 
-Documenting Exceptions
+## Documenting Exceptions
 Because PHP, unlike Java, does not require you to explicitly state which exceptions a method throws in the method signature, it is critical that exceptions be thoroughly documented in your method headers.
 
 Exceptions should be documented using the @throws phpdoc keyword
 
-<?php
-/**
- * This method searches for aliens.
- *
- * @return array Array of Aliens objects.
- * @throws AntennaBrokenException If the impedence readings indicate
- * that the antenna is broken.
- *
- * @throws AntennaInUseException If another process is using the
- * antenna already.
- */
-public function findAliens($color = 'green');
-?>
+    <?php
+    /**
+     * This method searches for aliens.
+     *
+     * @return array Array of Aliens objects.
+     * @throws AntennaBrokenException If the impedence readings indicate
+     * that the antenna is broken.
+     *
+     * @throws AntennaInUseException If another process is using the
+     * antenna already.
+     */
+    public function findAliens($color = 'green');
+    ?>
+
 In many cases middle layers of an application will rewrap any lower-level exceptions into more meaningful application exceptions. This also needs to be made clear:
 
-<?php
-/**
- * Load session objects into shared memory.
- *
- * @throws LoadingException Any lower-level IOException will be wrapped
- * and re-thrown as a LoadingException.
- */
-public function loadSessionObjects();
-?>
+    <?php
+    /**
+     * Load session objects into shared memory.
+     *
+     * @throws LoadingException Any lower-level IOException will be wrapped
+     * and re-thrown as a LoadingException.
+     */
+    public function loadSessionObjects();
+    ?>
+
 In other cases your method may simply be a conduit through which lower level exceptions can pass freely. As challenging as it may be, your method should also document which exceptions it is not catching.
 
-<?php
-/**
- * Performs a batch of database queries (atomically, not in transaction).
- * @throws SQLException Low-level SQL errors will bubble up through this method.
- */
-public function batchExecute();
-?>
-Exceptions as part of the API
+    <?php
+    /**
+     * Performs a batch of database queries (atomically, not in transaction).
+     * @throws SQLException Low-level SQL errors will bubble up through this method.
+     */
+    public function batchExecute();
+    ?>
+
+## Exceptions as part of the API
 Exceptions play a critical role in the API of your library. Developers using your library depend on accurate descriptions of where and why exceptions might be thrown from your package. Documentation is critical. Also maintaining the types of messages that are thrown is also an important requirement for maintaining backwards-compatibility.
 
 Because Exceptions are critical to the API of your package, you must ensure that you don't break backwards compatibility (BC) by making changes to exceptions.
@@ -747,53 +699,79 @@ Things that do not break BC:
 
 Throwing a subclass of the original exception. For example, changing a method to throw PEAR_IOException when before it had been throwing PEAR_Exception would not break BC (provided that PEAR_IOException extends PEAR_Exception).
 
-
-
-
 # Best practices
 There are other things not covered by PEAR Coding Standards which are mostly subject of personal preference and not directly related to readability of the code. Things like "single quotes vs double quotes" are features of PHP itself to make programming easier and there are no reasons not use one way in preference to another. Such best practices are left solely on developer to decide. The only recommendation could be made to keep consistency within package and respect personal style of other developers.
 
-Readability of code blocks
+## Readability of code blocks
 Related lines of code should be grouped into blocks, separated from each other to keep readability as high as possible. The definition of "related" depends on the code :)
 
 For example:
 
-<?php
+    <?php
+    
+    if ($foo) {
+        $bar = 1;
+    }
+    if ($spam) {
+        $ham = 1;
+    }
+    if ($pinky) {
+        $brain = 1;
+    }
+    ?>
 
-if ($foo) {
-    $bar = 1;
-}
-if ($spam) {
-    $ham = 1;
-}
-if ($pinky) {
-    $brain = 1;
-}
-?>
 is a lot easier to read when separated:
 
-<?php
+    <?php
+    
+    if ($foo) {
+        $bar = 1;
+    }
+    
+    if ($spam) {
+        $ham = 1;
+    }
+    
+    if ($pinky) {
+        $brain = 1;
+    }
+    ?>
 
-if ($foo) {
-    $bar = 1;
-}
-
-if ($spam) {
-    $ham = 1;
-}
-
-if ($pinky) {
-    $brain = 1;
-}
-?>
-Return early
+## Return early
 To keep readability in functions and methods, it is wise to return early if simple conditions apply that can be checked at the beginning of a method:
 
-<?php
+    <?php
+    
+    function foo($bar, $baz)
+    {
+        if ($foo) {
+            //assume
+            //that
+            //here
+            //is
+            //the
+            //whole
+            //logic
+            //of
+            //this
+            //method
+            return $calculated_value;
+        } else {
+            return null;
+        }
+    }
+    ?>
 
-function foo($bar, $baz)
-{
-    if ($foo) {
+It's better to return early, keeping indentation and brain power needed to follow the code low.
+
+    <?php
+    
+    function foo($bar, $baz)
+    {
+        if (!$foo) {
+            return null;
+        }
+    
         //assume
         //that
         //here
@@ -805,36 +783,8 @@ function foo($bar, $baz)
         //this
         //method
         return $calculated_value;
-    } else {
-        return null;
     }
-}
-?>
-It's better to return early, keeping indentation and brain power needed to follow the code low.
-
-<?php
-
-function foo($bar, $baz)
-{
-    if (!$foo) {
-        return null;
-    }
-
-    //assume
-    //that
-    //here
-    //is
-    //the
-    //whole
-    //logic
-    //of
-    //this
-    //method
-    return $calculated_value;
-}
-?>
-
-
+    ?>
 
 # Sample File (including Docblock Comment standards)
 The source code of PEAR packages are read by thousands of people. Also, it is likely other people will become developers on your package at some point in the future. Therefore, it is important to make life easier for everyone by formatting the code and docblocks in standardized ways. People can then quickly find the information they are looking for because it is in the expected location. Your cooperation is appreciated.
@@ -845,285 +795,287 @@ Please take note of the vertical and horizontal spacing. They are part of the st
 
 The "fold markers" (// {{{ and // }}}) are optional. If you aren't using fold markers, remove foldmethod=marker from the vim header.
 
-<?php
-
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
-/**
- * Short description for file
- *
- * Long description for file (if any)...
- *
- * PHP version 5
- *
- * LICENSE: This source file is subject to version 3.01 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
- *
- * @category   CategoryName
- * @package    PackageName
- * @author     Original Author <author@example.com>
- * @author     Another Author <another@example.com>
- * @copyright  1997-2005 The PHP Group
- * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/PackageName
- * @see        NetOther, Net_Sample::Net_Sample()
- * @since      File available since Release 1.2.0
- * @deprecated File deprecated in Release 2.0.0
- */
-
-/**
- * This is a "Docblock Comment," also known as a "docblock."  The class'
- * docblock, below, contains a complete description of how to write these.
- */
-require_once 'PEAR.php';
-
-// {{{ constants
-
-/**
- * Methods return this if they succeed
- */
-define('NET_SAMPLE_OK', 1);
-
-// }}}
-// {{{ GLOBALS
-
-/**
- * The number of objects created
- * @global int $GLOBALS['_NET_SAMPLE_Count']
- */
-$GLOBALS['_NET_SAMPLE_Count'] = 0;
-
-// }}}
-// {{{ Net_Sample
-
-/**
- * An example of how to write code to PEAR's standards
- *
- * Docblock comments start with "/**" at the top.  Notice how the "/"
- * lines up with the normal indenting and the asterisks on subsequent rows
- * are in line with the first asterisk.  The last line of comment text
- * should be immediately followed on the next line by the closing asterisk
- * and slash and then the item you are commenting on should be on the next
- * line below that.  Don't add extra lines.  Please put a blank line
- * between paragraphs as well as between the end of the description and
- * the start of the @tags.  Wrap comments before 80 columns in order to
- * ease readability for a wide variety of users.
- *
- * Docblocks can only be used for programming constructs which allow them
- * (classes, properties, methods, defines, includes, globals).  See the
- * phpDocumentor documentation for more information.
- * http://phpdoc.org/docs/HTMLSmartyConverter/default/phpDocumentor/tutorial_phpDocumentor.howto.pkg.html
- *
- * The Javadoc Style Guide is an excellent resource for figuring out
- * how to say what needs to be said in docblock comments.  Much of what is
- * written here is a summary of what is found there, though there are some
- * cases where what's said here overrides what is said there.
- * http://java.sun.com/j2se/javadoc/writingdoccomments/index.html#styleguide
- *
- * The first line of any docblock is the summary.  Make them one short
- * sentence, without a period at the end.  Summaries for classes, properties
- * and constants should omit the subject and simply state the object,
- * because they are describing things rather than actions or behaviors.
- *
- * Below are the tags commonly used for classes. @category through @version
- * are required.  The remainder should only be used when necessary.
- * Please use them in the order they appear here.  phpDocumentor has
- * several other tags available, feel free to use them.
- *
- * @category   CategoryName
- * @package    PackageName
- * @author     Original Author <author@example.com>
- * @author     Another Author <another@example.com>
- * @copyright  1997-2005 The PHP Group
- * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
- * @version    Release: @package_version@
- * @link       http://pear.php.net/package/PackageName
- * @see        NetOther, Net_Sample::Net_Sample()
- * @since      Class available since Release 1.2.0
- * @deprecated Class deprecated in Release 2.0.0
- */
-class Net_Sample
-{
-    // {{{ properties
-
+    <?php
+    
+    /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+    
     /**
-     * The status of foo's universe
+     * Short description for file
      *
-     * Potential values are 'good', 'fair', 'poor' and 'unknown'.
+     * Long description for file (if any)...
      *
-     * @var string
+     * PHP version 5
+     *
+     * LICENSE: This source file is subject to version 3.01 of the PHP license
+     * that is available through the world-wide-web at the following URI:
+     * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+     * the PHP License and are unable to obtain it through the web, please
+     * send a note to license@php.net so we can mail you a copy immediately.
+     *
+     * @category   CategoryName
+     * @package    PackageName
+     * @author     Original Author <author@example.com>
+     * @author     Another Author <another@example.com>
+     * @copyright  1997-2005 The PHP Group
+     * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
+     * @version    SVN: $Id$
+     * @link       http://pear.php.net/package/PackageName
+     * @see        NetOther, Net_Sample::Net_Sample()
+     * @since      File available since Release 1.2.0
+     * @deprecated File deprecated in Release 2.0.0
      */
-    var $foo = 'unknown';
-
+    
     /**
-     * The status of life
-     *
-     * Note that names of private properties or methods must be
-     * preceeded by an underscore.
-     *
-     * @var bool
-     * @access private
+     * This is a "Docblock Comment," also known as a "docblock."  The class'
+     * docblock, below, contains a complete description of how to write these.
      */
-    var $_good = true;
-
+    require_once 'PEAR.php';
+    
+    // {{{ constants
+    
+    /**
+     * Methods return this if they succeed
+     */
+    define('NET_SAMPLE_OK', 1);
+    
     // }}}
-    // {{{ setFoo()
-
+    // {{{ GLOBALS
+    
     /**
-     * Registers the status of foo's universe
-     *
-     * Summaries for methods should use 3rd person declarative rather
-     * than 2nd person imperative, beginning with a verb phrase.
-     *
-     * Summaries should add description beyond the method's name. The
-     * best method names are "self-documenting", meaning they tell you
-     * basically what the method does.  If the summary merely repeats
-     * the method name in sentence form, it is not providing more
-     * information.
-     *
-     * Summary Examples:
-     *   + Sets the label              (preferred)
-     *   + Set the label               (avoid)
-     *   + This method sets the label  (avoid)
-     *
-     * Below are the tags commonly used for methods.  A @param tag is
-     * required for each parameter the method has.  The @return
-     * and @access tags are mandatory.  The @throws tag is required if
-     * the method uses exceptions.  @static is required if the method can
-     * be called statically.  The remainder should only be used when
-     * necessary.  Please use them in the order they appear here.
-     * phpDocumentor has several other tags available, feel free to use
-     * them.
-     *
-     * The @param tag contains the data type, then the parameter's
-     * name, followed by a description.  By convention, the first noun in
-     * the description is the data type of the parameter.  Articles like
-     * "a", "an", and  "the" can precede the noun.  The descriptions
-     * should start with a phrase.  If further description is necessary,
-     * follow with sentences.  Having two spaces between the name and the
-     * description aids readability.
-     *
-     * When writing a phrase, do not capitalize and do not end with a
-     * period:
-     *   + the string to be tested
-     *
-     * When writing a phrase followed by a sentence, do not capitalize the
-     * phrase, but end it with a period to distinguish it from the start
-     * of the next sentence:
-     *   + the string to be tested. Must use UTF-8 encoding.
-     *
-     * Return tags should contain the data type then a description of
-     * the data returned.  The data type can be any of PHP's data types
-     * (int, float, bool, string, array, object, resource, mixed)
-     * and should contain the type primarily returned.  For example, if
-     * a method returns an object when things work correctly but false
-     * when an error happens, say 'object' rather than 'mixed.'  Use
-     * 'void' if nothing is returned.
-     *
-     * Here's an example of how to format examples:
-     * <code>
-     * require_once 'Net/Sample.php';
-     *
-     * $s = new Net_Sample();
-     * if (PEAR::isError($s)) {
-     *     echo $s->getMessage() . "\n";
-     * }
-     * </code>
-     *
-     * Here is an example for non-php example or sample:
-     * <samp>
-     * pear install net_sample
-     * </samp>
-     *
-     * @param string $arg1 the string to quote
-     * @param int    $arg2 an integer of how many problems happened.
-     *                     Indent to the description's starting point
-     *                     for long ones.
-     *
-     * @return int the integer of the set mode used. FALSE if foo
-     *             foo could not be set.
-     * @throws exceptionclass [description]
-     *
-     * @access public
-     * @static
-     * @see Net_Sample::$foo, Net_Other::someMethod()
-     * @since Method available since Release 1.2.0
-     * @deprecated Method deprecated in Release 2.0.0
+     * The number of objects created
+     * @global int $GLOBALS['_NET_SAMPLE_Count']
      */
-    function setFoo($arg1, $arg2 = 0)
+    $GLOBALS['_NET_SAMPLE_Count'] = 0;
+    
+    // }}}
+    // {{{ Net_Sample
+    
+    /**
+     * An example of how to write code to PEAR's standards
+     *
+     * Docblock comments start with "/**" at the top.  Notice how the "/"
+     * lines up with the normal indenting and the asterisks on subsequent rows
+     * are in line with the first asterisk.  The last line of comment text
+     * should be immediately followed on the next line by the closing asterisk
+     * and slash and then the item you are commenting on should be on the next
+     * line below that.  Don't add extra lines.  Please put a blank line
+     * between paragraphs as well as between the end of the description and
+     * the start of the @tags.  Wrap comments before 80 columns in order to
+     * ease readability for a wide variety of users.
+     *
+     * Docblocks can only be used for programming constructs which allow them
+     * (classes, properties, methods, defines, includes, globals).  See the
+     * phpDocumentor documentation for more information.
+     * http://phpdoc.org/docs/HTMLSmartyConverter/default/phpDocumentor/tutorial_phpDocumentor.howto.pkg.html
+     *
+     * The Javadoc Style Guide is an excellent resource for figuring out
+     * how to say what needs to be said in docblock comments.  Much of what is
+     * written here is a summary of what is found there, though there are some
+     * cases where what's said here overrides what is said there.
+     * http://java.sun.com/j2se/javadoc/writingdoccomments/index.html#styleguide
+     *
+     * The first line of any docblock is the summary.  Make them one short
+     * sentence, without a period at the end.  Summaries for classes, properties
+     * and constants should omit the subject and simply state the object,
+     * because they are describing things rather than actions or behaviors.
+     *
+     * Below are the tags commonly used for classes. @category through @version
+     * are required.  The remainder should only be used when necessary.
+     * Please use them in the order they appear here.  phpDocumentor has
+     * several other tags available, feel free to use them.
+     *
+     * @category   CategoryName
+     * @package    PackageName
+     * @author     Original Author <author@example.com>
+     * @author     Another Author <another@example.com>
+     * @copyright  1997-2005 The PHP Group
+     * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
+     * @version    Release: @package_version@
+     * @link       http://pear.php.net/package/PackageName
+     * @see        NetOther, Net_Sample::Net_Sample()
+     * @since      Class available since Release 1.2.0
+     * @deprecated Class deprecated in Release 2.0.0
+     */
+    class Net_Sample
     {
-        /*
-         * This is a "Block Comment."  The format is the same as
-         * Docblock Comments except there is only one asterisk at the
-         * top.  phpDocumentor doesn't parse these.
+        // {{{ properties
+    
+        /**
+         * The status of foo's universe
+         *
+         * Potential values are 'good', 'fair', 'poor' and 'unknown'.
+         *
+         * @var string
          */
-        if ($arg1 == 'good' || $arg1 == 'fair') {
-            $this->foo = $arg1;
-            return 1;
-        } elseif ($arg1 == 'poor' && $arg2 > 1) {
-            $this->foo = 'poor';
-            return 2;
-        } else {
-            return false;
+        var $foo = 'unknown';
+    
+        /**
+         * The status of life
+         *
+         * Note that names of private properties or methods must be
+         * preceeded by an underscore.
+         *
+         * @var bool
+         * @access private
+         */
+        var $_good = true;
+    
+        // }}}
+        // {{{ setFoo()
+    
+        /**
+         * Registers the status of foo's universe
+         *
+         * Summaries for methods should use 3rd person declarative rather
+         * than 2nd person imperative, beginning with a verb phrase.
+         *
+         * Summaries should add description beyond the method's name. The
+         * best method names are "self-documenting", meaning they tell you
+         * basically what the method does.  If the summary merely repeats
+         * the method name in sentence form, it is not providing more
+         * information.
+         *
+         * Summary Examples:
+         *   + Sets the label              (preferred)
+         *   + Set the label               (avoid)
+         *   + This method sets the label  (avoid)
+         *
+         * Below are the tags commonly used for methods.  A @param tag is
+         * required for each parameter the method has.  The @return
+         * and @access tags are mandatory.  The @throws tag is required if
+         * the method uses exceptions.  @static is required if the method can
+         * be called statically.  The remainder should only be used when
+         * necessary.  Please use them in the order they appear here.
+         * phpDocumentor has several other tags available, feel free to use
+         * them.
+         *
+         * The @param tag contains the data type, then the parameter's
+         * name, followed by a description.  By convention, the first noun in
+         * the description is the data type of the parameter.  Articles like
+         * "a", "an", and  "the" can precede the noun.  The descriptions
+         * should start with a phrase.  If further description is necessary,
+         * follow with sentences.  Having two spaces between the name and the
+         * description aids readability.
+         *
+         * When writing a phrase, do not capitalize and do not end with a
+         * period:
+         *   + the string to be tested
+         *
+         * When writing a phrase followed by a sentence, do not capitalize the
+         * phrase, but end it with a period to distinguish it from the start
+         * of the next sentence:
+         *   + the string to be tested. Must use UTF-8 encoding.
+         *
+         * Return tags should contain the data type then a description of
+         * the data returned.  The data type can be any of PHP's data types
+         * (int, float, bool, string, array, object, resource, mixed)
+         * and should contain the type primarily returned.  For example, if
+         * a method returns an object when things work correctly but false
+         * when an error happens, say 'object' rather than 'mixed.'  Use
+         * 'void' if nothing is returned.
+         *
+         * Here's an example of how to format examples:
+         * <code>
+         * require_once 'Net/Sample.php';
+         *
+         * $s = new Net_Sample();
+         * if (PEAR::isError($s)) {
+         *     echo $s->getMessage() . "\n";
+         * }
+         * </code>
+         *
+         * Here is an example for non-php example or sample:
+         * <samp>
+         * pear install net_sample
+         * </samp>
+         *
+         * @param string $arg1 the string to quote
+         * @param int    $arg2 an integer of how many problems happened.
+         *                     Indent to the description's starting point
+         *                     for long ones.
+         *
+         * @return int the integer of the set mode used. FALSE if foo
+         *             foo could not be set.
+         * @throws exceptionclass [description]
+         *
+         * @access public
+         * @static
+         * @see Net_Sample::$foo, Net_Other::someMethod()
+         * @since Method available since Release 1.2.0
+         * @deprecated Method deprecated in Release 2.0.0
+         */
+        function setFoo($arg1, $arg2 = 0)
+        {
+            /*
+             * This is a "Block Comment."  The format is the same as
+             * Docblock Comments except there is only one asterisk at the
+             * top.  phpDocumentor doesn't parse these.
+             */
+            if ($arg1 == 'good' || $arg1 == 'fair') {
+                $this->foo = $arg1;
+                return 1;
+            } elseif ($arg1 == 'poor' && $arg2 > 1) {
+                $this->foo = 'poor';
+                return 2;
+            } else {
+                return false;
+            }
         }
+    
+        // }}}
     }
-
+    
     // }}}
-}
-
-// }}}
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * c-hanging-comment-ender-p: nil
- * End:
- */
-
-?>
-
-
+    
+    /*
+     * Local variables:
+     * tab-width: 4
+     * c-basic-offset: 4
+     * c-hanging-comment-ender-p: nil
+     * End:
+     */
+    
+    ?>
 
 # Rules
 We will describe the list of rules that form the standards
 
-Namespace prefix
+## Namespace prefix
 All classes and functions must have a namespace of at the minimum PEAR2. An example:
 
-<?php
-namespace PEAR2;
-class MyClass {}
-?>
+    <?php
+    namespace PEAR2;
+    class MyClass {}
+    ?>
+
 Classes may use longer namespaces, for instance an HTTP_Request class may instead choose to use this declarative syntax:
 
-<?php
-namespace PEAR2\HTTP;
-class Request {}
-?>
+    <?php
+    namespace PEAR2\HTTP;
+    class Request {}
+    ?>
+
 As such, underscores are no longer required of any classes if there is a namespace. Class PEAR2_HTTP_Request instead becomes PEAR2\HTTP\Request. Package names, however, will use underscores, making PEAR2_HTTP_Request the package name.
 
-Requirement
+## Requirement
 No Exceptions to this rule
 use of include/require/require_once/include_once not allowed
 include/require/require_once/include_once is not allowed for loading class files. Users will be expected to load files either with __autoload() or a customized solution for more advanced users. Instead, classes should simply be used. import with a comment describing the class's location must be used to document all internal dependencies (as written below). Instead of:
 
-<?php
-require_once 'PEAR2/OtherPackage.php';
-$class = new PEAR2\OtherPackage;
-?>
-this class should simply be used:
+    <?php
+    require_once 'PEAR2/OtherPackage.php';
+    $class = new PEAR2\OtherPackage;
+    ?>
 
-<?php
-$class = new PEAR2\OtherPackage;
-?>
+this class should simply be used:
+    
+    <?php
+    $class = new PEAR2\OtherPackage;
+    ?>
+
 This allows packages to work without modification no matter how they are structured on-disk, including running out of a single large file, inside a phar archive, and provides much-needed flexibility.
 
-Requirement
+## Requirement
 No Exceptions to this rule
 Directory structure
 Follows the directory structure in the PEAR2 Subversion repository:
@@ -1138,68 +1090,62 @@ PEAR2/Package_Name/
                   (php executable files that exemplify package usage)
 Note that all package.xml files must specify a baseinstalldir of "/" for the src/ directory:
 
-<contents>
-  <dir name="/">
-  <dir name="src" baseinstalldir="/">
-  ...
-</contents>
-Requirement
+    <contents>
+      <dir name="/">
+      <dir name="src" baseinstalldir="/">
+      ...
+    </contents>
+
+## Requirement
 Exceptions may be made to this rule with approval from the PEAR Group
 Class-to-file convention
 All public classes must be in their own file with underscores (_) or namespace separators (\) replaced by directory separator, so that PEAR2_PackageName_Base class or PEAR2\PackageName\Base class is always located in PEAR2/PackageName/Base.php (this is required to make autoload work)
 
-Requirement
+## Requirement
 Exceptions may be made to this rule only with explicit approval from the PEAR Group via a public vote
 Base Exception class
 PEAR2\Exception is used as base class for all exception classes. Each package must define a base class that is packagename_Exception. For example, the PEAR2\PackageName class defines an exception as follows in PEAR2/PackageName/Exception.php:
 
-<?php
-namespace PEAR2\PackageName;
-class Exception extends PEAR2\Exception {}
-?>
+    <?php
+    namespace PEAR2\PackageName;
+    class Exception extends PEAR2\Exception {}
+    ?>
+
 'PEAR2\Exception will be its own package'
 
-Requirement
+## Requirement
 No Exceptions to this rule
 Data files
 package.xml replacement tasks should not be used to retrieve path locations for php, data, or www files. Replacements are still allowed in doc and test files.
 
 The installation structure of a package has implicit php_dir/src installation location, and data files are always located in php_dir/data/channel/PackageName/. To retrieve a data file within PEAR2/PackageName/Subfile.php, you could use code like this example
 
-<?php
-...
-// retrieve data from info.txt
-$info = file_get_contents(dirname(__FILE__) .
-    '../../../data/pear2.php.net/PEAR2_PackageName/info.txt');
-?>
-Requirement
+    <?php
+    ...
+    // retrieve data from info.txt
+    $info = file_get_contents(dirname(__FILE__) .
+        '../../../data/pear2.php.net/PEAR2_PackageName/info.txt');
+    ?>
+
+## Requirement
 No Exceptions to this rule
 Loading other classes
 Inside optional component loading methods (like factory or driver loading, etc.) class_exists($classname, true) should be used where a "class not found" fatal error would be confusing. For example, when loading a driver, a graceful exit via exception with helpful error message is preferrable to the fatal error:
 
-<?php
-if (!class_exists("PEAR2_PackageName_Driver_$class", true)) {
-    throw new PEAR2\PackageName\Exception('Unknown driver ' .
-    $class . ', be sure the driver exists and is loaded
-    prior to use');
-}
-?>
-Requirement
+    <?php
+    if (!class_exists("PEAR2_PackageName_Driver_$class", true)) {
+        throw new PEAR2\PackageName\Exception('Unknown driver ' .
+        $class . ', be sure the driver exists and is loaded
+        prior to use');
+    }
+    ?>
+
+## Requirement
 This rule is optional and is a suggested coding practice
 
 
 
-
-
-
-
-
-
-
-Coding standards
-
-Last updated December 23, 2012. Created by beeradb on July 28, 2002.
-Edited by klausi, mikeryan, jhodgdon, tim.plunkett. Log in to edit this page.
+# Coding standards
 
 Note: The Drupal Coding Standards apply to code within Drupal and its contributed modules. This document is loosely based on the PEAR Coding standards. Comments and names should use US English spelling (e.g., "color" not "colour").
 
@@ -1209,27 +1155,8 @@ Note: Do not squeeze coding standards updates/clean-ups into otherwise unrelated
 
 See the Helper modules section at the bottom of this page for information on modules that can review code for coding standards problems (and in some cases, even fix the problems).
 
-Contents of this Page
-Indenting and Whitespace
-Operators
-Casting
-Control Structures
-Line length and wrapping
-Function Calls
-Function Declarations
-Class Constructor Calls
-Arrays
-Quotes
-String Concatenations
-Comments
-Including Code
-PHP Code Tags
-Semicolons
-Example URLs
-Naming Conventions (Functions, Constants, Global Variables, Classes, Files)
-Helper Module
 
-Indenting and Whitespace
+## Indenting and Whitespace
 Use an indent of 2 spaces, with no tabs.
 
 Lines should have no trailing whitespace at the end.
@@ -1238,27 +1165,24 @@ Files should be formatted with \n as the line ending (Unix line endings), not \r
 
 All text files should end in a single newline (\n). This avoids the verbose "\ No newline at end of file" patch warning and makes patches easier to read since it's clearer what is being changed when lines are added to the end of a file.
 
-
-Operators
+## Operators
 All binary operators (operators that come between two values), such as +, -, =, !=, ==, >, etc. should have a space before and after the operator, for readability. For example, an assignment should be formatted as $foo = $bar; rather than $foo=$bar;. Unary operators (operators that operate on only one value), such as ++, should not have a space between the operator and the variable or number they are operating on.
 
-
-Casting
+## Casting
 Put a space between the (type) and the $variable in a cast: (int) $mynumber.
 
-
-Control Structures
+## Control Structures
 Control structures include if, for, while, switch, etc. Here is a sample if statement, since it is the most complicated of them:
 
-if (condition1 || condition2) {
-  action1;
-}
-elseif (condition3 && condition4) {
-  action2;
-}
-else {
-  defaultaction;
-}
+    if (condition1 || condition2) {
+      action1;
+    }
+    elseif (condition3 && condition4) {
+      action2;
+    }
+    else {
+      defaultaction;
+    }
 
 (Note: Don't use "else if" -- always use elseif.)
 Control statements should have one space between the control keyword and opening parenthesis, to distinguish them from function calls.
@@ -1267,123 +1191,136 @@ Always use curly braces even in situations where they are technically optional. 
 
 For switch statements:
 
-switch (condition) {
-  case 1:
-    action1;
-    break;
+    switch (condition) {
+      case 1:
+        action1;
+        break;
+    
+      case 2:
+        action2;
+        break;
+    
+      default:
+        defaultaction;
+    }
 
-  case 2:
-    action2;
-    break;
-
-  default:
-    defaultaction;
-}
 For do-while statements:
 
-do {
-  actions;
-} while ($condition);
+    do {
+      actions;
+    } while ($condition);
   
-Alternate control statement syntax for templates
+## Alternate control statement syntax for templates
 
 In templates, the alternate control statement syntax using : instead of brackets is allowed. Note that there should not be a space between the closing paren after the control keyword, and the colon, and HTML/PHP inside the control structure should be indented. For example:
-<?php if (!empty($item)): ?>
-  <p><?php print $item; ?></p>
-<?php endif; ?>
+    <?php if (!empty($item)): ?>
+      <p><?php print $item; ?></p>
+    <?php endif; ?>
+    
+    <?php foreach ($items as $item): ?>
+      <p><?php print $item; ?></p>
+    <?php endforeach; ?>
 
-<?php foreach ($items as $item): ?>
-  <p><?php print $item; ?></p>
-<?php endforeach; ?>
-
-Line length and wrapping
+## Line length and wrapping
 The following rules apply to code. See Doxygen and comment formatting conventions for rules pertaining to comments.
 
 In general, all lines of code should not be longer than 80 chars.
 Lines containing longer function names, function/class definitions, variable declarations, etc are allowed to exceed 80 chars.
 Control structure conditions may exceed 80 chars, if they are simple to read and understand:
-  if ($something['with']['something']['else']['in']['here'] == mymodule_check_something($whatever['else'])) {
+
+    if ($something['with']['something']['else']['in']['here'] == mymodule_check_something($whatever['else'])) {
     ...
-  }
-  if (isset($something['what']['ever']) && $something['what']['ever'] > $infinite && user_access('galaxy')) {
+    }
+    if (isset($something['what']['ever']) && $something['what']['ever'] > $infinite && user_access('galaxy')) {
     ...
-  }
-  // Non-obvious conditions of low complexity are also acceptable, but should
-  // always be documented, explaining WHY a particular check is done.
-  if (preg_match('@(/|\\)(\.\.|~)@', $target) && strpos($target_dir, $repository) !== 0) {
+    }
+    // Non-obvious conditions of low complexity are also acceptable, but should
+    // always be documented, explaining WHY a particular check is done.
+    if (preg_match('@(/|\\)(\.\.|~)@', $target) && strpos($target_dir, $repository) !== 0) {
     return FALSE;
-  }
+    }
+
 Conditions should not be wrapped into multiple lines.
 Control structure conditions should also NOT attempt to win the Most Compact Condition In Least Lines Of Code Award™:
-  // DON'T DO THIS!
-  if ((isset($key) && !empty($user->uid) && $key == $user->uid) || (isset($user->cache) ? $user->cache : '') == ip_address() || isset($value) && $value >= time())) {
-    ...
-  }
+
+      // DON'T DO THIS!
+      if ((isset($key) && !empty($user->uid) && $key == $user->uid) || (isset($user->cache) ? $user->cache : '') == ip_address() || isset($value) && $value >= time())) {
+        ...
+      }
 
 Instead, it is recommended practice to split out and prepare the conditions separately, which also permits documenting the underlying reasons for the conditions:
-  // Key is only valid if it matches the current user's ID, as otherwise other
-  // users could access any user's things.
-  $is_valid_user = (isset($key) && !empty($user->uid) && $key == $user->uid);
 
-  // IP must match the cache to prevent session spoofing.
-  $is_valid_cache = (isset($user->cache) ? $user->cache == ip_address() : FALSE);
-
-  // Alternatively, if the request query parameter is in the future, then it
-  // is always valid, because the galaxy will implode and collapse anyway.
-  $is_valid_query = $is_valid_cache || (isset($value) && $value >= time());
-
-  if ($is_valid_user || $is_valid_query) {
+    // Key is only valid if it matches the current user's ID, as otherwise other
+    // users could access any user's things.
+    $is_valid_user = (isset($key) && !empty($user->uid) && $key == $user->uid);
+    
+    // IP must match the cache to prevent session spoofing.
+    $is_valid_cache = (isset($user->cache) ? $user->cache == ip_address() : FALSE);
+    
+    // Alternatively, if the request query parameter is in the future, then it
+    // is always valid, because the galaxy will implode and collapse anyway.
+    $is_valid_query = $is_valid_cache || (isset($value) && $value >= time());
+    
+    if ($is_valid_user || $is_valid_query) {
     ...
-  }
+    }
 
 Note: This example is still a bit dense. Always consider and decide on your own whether people unfamiliar with your code will be able to make sense of the logic.
 
-Function Calls
+## Function Calls
 Functions should be called with no spaces between the function name, the opening parenthesis, and the first parameter; spaces between commas and each parameter, and no space between the last parameter, the closing parenthesis, and the semicolon. Here's an example:
 
-$var = foo($bar, $baz, $quux);
+    $var = foo($bar, $baz, $quux);
+
 As displayed above, there should be one space on either side of an equals sign used to assign the return value of a function to a variable. In the case of a block of related assignments, more space may be inserted to promote readability:
 
-$short         = foo($bar);
-$long_variable = foo($baz);
+    $short         = foo($bar);
+    $long_variable = foo($baz);
 
-Function Declarations
-function funstuff_system($field) {
-  $system["description"] = t("This module inserts funny text into posts randomly.");
-  return $system[$field];
-}
+## Function Declarations
+
+    function funstuff_system($field) {
+      $system["description"] = t("This module inserts funny text into posts randomly.");
+      return $system[$field];
+    }
+
 Arguments with default values go at the end of the argument list. Always attempt to return a meaningful value from a function if one is appropriate.
 
 
-Class Constructor Calls
+## Class Constructor Calls
 When calling class constructors with no arguments, always include parentheses:
-$foo = new MyClassName();
+
+    $foo = new MyClassName();
 
 This is to maintain consistency with constructors that have arguments:
-$foo = new MyClassName($arg1, $arg2);
+
+    $foo = new MyClassName($arg1, $arg2);
 
 Note that if the class name is a variable, the variable will be evaluated first to get the class name, and then the constructor will be called. Use the same syntax:
-$bar = 'MyClassName';
-$foo = new $bar();
-$foo = new $bar($arg1, $arg2);
 
-Arrays
+    $bar = 'MyClassName';
+    $foo = new $bar();
+    $foo = new $bar($arg1, $arg2);
+
+## Arrays
 Arrays should be formatted with a space separating each element (after the comma), and spaces around the => key association operator, if applicable:
 
-$some_array = array('hello', 'world', 'foo' => 'bar');
+    $some_array = array('hello', 'world', 'foo' => 'bar');
+
 Note that if the line declaring an array spans longer than 80 characters (often the case with form and menu declarations), each element should be broken into its own line, and indented one level:
 
-$form['title'] = array(
-  '#type' => 'textfield',
-  '#title' => t('Title'),
-  '#size' => 60,
-  '#maxlength' => 128,
-  '#description' => t('The title of your node.'),
-);
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#size' => 60,
+      '#maxlength' => 128,
+      '#description' => t('The title of your node.'),
+    );
+
 Note the comma at the end of the last array element; This is not a typo! It helps prevent parsing errors if another element is placed at the end of the list later.
 
 
-Quotes
+## Quotes
 Drupal does not have a hard standard for the use of single quotes vs. double quotes. Where possible, keep consistency within each module, and respect the personal style of other developers.
 
 With that caveat in mind: single quote strings are known to be faster because the parser doesn't have to look for in-line variables. Their use is recommended except in two cases:
@@ -1391,43 +1328,48 @@ With that caveat in mind: single quote strings are known to be faster because th
 In-line variable usage, e.g. "<h2>$header</h2>".
 Translated strings where one can avoid escaping single quotes by enclosing the string in double quotes. One such string would be "He's a good person." It would be 'He\'s a good person.' with single quotes. Such escaping may not be handled properly by .pot file generators for text translation, and it's also somewhat awkward to read.
 
-String Concatenations
+## String Concatenations
 Always use a space between the dot and the concatenated parts to improve readability.
 
-<?php 
-  $string = 'Foo' . $bar;
-  $string = $bar . 'foo';
-  $string = bar() . 'foo';
-  $string = 'foo' . 'bar';
-?>
+    <?php 
+      $string = 'Foo' . $bar;
+      $string = $bar . 'foo';
+      $string = bar() . 'foo';
+      $string = 'foo' . 'bar';
+    ?>
+
 When you concatenate simple variables, you can use double quotes and add the variable inside; otherwise, use single quotes.
 
-<?php
-  $string = "Foo $bar";
-?>
-When using the concatenating assignment operator ('.='), use a space on each side as with the assignment operator:
-<?php
-$string .= 'Foo';
-$string .= $bar;
-$string .= baz();
-?>
+    <?php
+      $string = "Foo $bar";
+    ?>
 
-Comments
+When using the concatenating assignment operator ('.='), use a space on each side as with the assignment operator:
+
+    <?php
+    $string .= 'Foo';
+    $string .= $bar;
+    $string .= baz();
+    ?>
+
+## Comments
 Comment standards are discussed on the separate Doxygen and comment formatting conventions page.
 
 
-Including Code
+## Including Code
 Anywhere you are unconditionally including a class file, use require_once(). Anywhere you are conditionally including a class file (for example, factory methods), use include_once(). Either of these will ensure that class files are included only once. They share the same file list, so you don't need to worry about mixing them - a file included with require_once() will not be included again by include_once().
 
 Note: include_once() and require_once() are statements, not functions. You don't need parentheses around the file name to be included.
 
 When including code from the same directory or a sub-directory, start the file path with ".":
-include_once ./includes/mymodule_formatting.inc
+
+    include_once ./includes/mymodule_formatting.inc
+
 In Drupal 7.x and later versions, use DRUPAL_ROOT:
 require_once DRUPAL_ROOT . '/' . variable_get('cache_inc', 'includes/cache.inc');
 
 
-PHP Code Tags
+## PHP Code Tags
 Always use <?php ?> to delimit PHP code, not the shorthand, <? ?>. This is required for Drupal compliance and is also the most portable way to include PHP code on differing operating systems and set-ups.
 
 Note that as of Drupal 4.7, the ?> at the end of code files is purposely omitted. This includes for module and include files. The reasons for this can be summarized as:
@@ -1436,109 +1378,68 @@ Removing it eliminates the possibility for unwanted whitespace at the end of fil
 The closing delimiter at the end of a file is optional.
 PHP.net itself removes the closing delimiter from the end of its files (example: prepend.inc), so this can be seen as a "best practice."
 
-Semicolons
+## Semicolons
 The PHP language requires semicolons at the end of most lines, but allows them to be omitted at the end of code blocks. Drupal coding standards require them, even at the end of code blocks. In particular, for one-line PHP blocks:
-<?php print $tax; ?> -- YES
-<?php print $tax ?> -- NO
 
-Example URLs
-Use "example.com" for all example URLs, per RFC 2606.
+    <?php print $tax; ?> -- YES
+    <?php print $tax ?> -- NO
 
-
-Naming Conventions
-Functions and variables
+## Naming Conventions
+### Functions and variables
 
 Functions and variables should be named using lowercase, and words should be separated with an underscore. Functions should in addition have the grouping/module name as a prefix, to avoid name collisions between modules.
 
-Persistent Variables
+### Persistent Variables
 
 Persistent variables (variables/settings defined using Drupal's variable_get()/variable_set() functions) should be named using all lowercase letters, and words should be separated with an underscore. They should use the grouping/module name as a prefix, to avoid name collisions between modules.
 
-Constants
+### Constants
 
 Constants should always be all-uppercase, with underscores to separate words. (This includes pre-defined PHP constants like TRUE, FALSE, and NULL.)
 Module-defined constant names should also be prefixed by an uppercase spelling of the module that defines them.
 In Drupal 8 and later, constants should be defined using the const PHP language keyword (instead of define()), because it is better for performance:
-<?php
-/**
- * Indicates that the item should be removed at the next general cache wipe.
- */
- const CACHE_TEMPORARY = -1;
-?>
+
+    <?php
+    /**
+     * Indicates that the item should be removed at the next general cache wipe.
+     */
+     const CACHE_TEMPORARY = -1;
+    ?>
+
 Note that const does not work with PHP expressions. define() should be used when defining a constant conditionally or with a non-literal value:
 
-<?php
-if (!defined('MAINTENANCE_MODE')) {
-  define('MAINTENANCE_MODE', 'error');
-}
-?>
-Global Variables
+    <?php
+    if (!defined('MAINTENANCE_MODE')) {
+      define('MAINTENANCE_MODE', 'error');
+    }
+    ?>
+
+### Global Variables
 
 If you need to define global variables, their name should start with a single underscore followed by the module/theme name and another underscore.
 
-Classes
+### Classes
 
 All standards related to classes and interfaces, including naming, are covered on http://drupal.org/node/608152 instead of here.
 
-File names
+### File names
 
 All documentation files should have the file name extension ".txt" to make viewing them on Windows systems easier. Also, the file names for such files should be all-caps (e.g. README.txt instead of readme.txt) while the extension itself is all-lowercase (i.e. txt instead of TXT).
 
 Examples: README.txt, INSTALL.txt, TODO.txt, CHANGELOG.txt etc.
 
 
-Helper Modules
-There are several contributed modules/projects available to assist with review for coding standards compliance:
-
-Coder module, which includes both Coder Review (reviews) and Coder Upgrade (updates your code). To use it:
-Install the module (like any other module)
-Click on the "Code Review" link in your navigation menu.
-Scroll down to "Select Specific Modules".
-Select the module you wish to review, and click the "Submit" button.
-As an alternative to starting from the Code Review link in navigation, you can also review a particular module's code by clicking on the link on the Modules admin screen.
-
-Dreditor (a browser plug-in for reviewing patches and more)
-PARevview (a set of scripts for reviewing project applications, which runs some coding tests)
-Coder Sniffer (runs coding standards validation without loading drupal)
-The Grammar Parser module provides an automated way of rewriting code files in compliance with code standards. You'll probably also need the Grammar Parser UI module.
 
 
 
 
-
-
-Doxygen and comment formatting conventions
-
-Last updated October 25, 2012. Created by JohnAlbin on March 14, 2003.
-Edited by jhodgdon, chx, xjm, tim.plunkett. Log in to edit this page.
+# Doxygen and comment formatting conventions
 
 This page covers the standards for documentation in Drupal code. There are two types of comments: in-line and headers. In-line comments are comments that are within functions. In Drupal, documentation headers on functions, classes, constants, etc. are specially-formatted comments used to build the documentation on api.drupal.org. The system for extracting documentation from the header comments uses the Doxygen generation system, and since the documentation is extracted directly from the sources, it is much easier to keep the documentation consistent with the source code.
 
 There is an excellent Doxygen manual at the Doxygen site. This page describes the Drupal implementation of Doxygen, and our standards for both in-line and header comments.
 
-Note: Before making any changes to the standards in this document, please file an issue in the Drupal issue queue, with component "documentation", so your proposed changes can be discussed.
-
-On this page:
-
-General documentation standards
-In-line comment standards
-General header documentation syntax, including a section on documenting lists
-Documenting files
-Documenting functions and methods
-Documenting hook definitions
-Documenting hook implementations and theme preprocess functions
-Documenting form-generating functions
-Documenting Render API callbacks
-Documenting themeable functions
-Documenting theme templates
-Documenting hook_menu() callbacks
-Documenting constants and variables
-Documenting classes and interfaces, including Plugin annotations
-Using namespaces and namespaced classes in documentation
-Documenting groups/topics
-Sections, sub-sections, and in-page links
-Limitations and hints
-General documentation standards
+## General documentation standards
 These standards apply to both in-line and header comments:
 
 All documentation and comments should form proper sentences and use proper grammar and punctuation.
@@ -1555,14 +1456,14 @@ If each line of a list needs a separate comment, the comments may be given on th
 
 C style comments (/* */) and standard C++ comments (//) are both fine, though the former is discouraged within functions (even for multiple lines, repeat the // single-line comment). Use of Perl/shell style comments (#) is discouraged.
 
-General header documentation syntax
+## General header documentation syntax
 To document a block of code, such as a file, function, class, method, constant, etc., the syntax we use is:
 /**
  * Documentation here.
  */
 Doxygen will parse any comments located in such a block. Our style is to use as few Doxygen-specific commands as possible, so as to keep the source legible. Any mentions of functions, classes, file names, topics, etc. within the documentation will automatically link to the referenced code, so typically no markup need be introduced to produce links. The documentation block should appear immediately before the function, class, method, etc. that is being documented, with no blank lines in between.
 
-Doxygen directives - general notes
+## Doxygen directives - general notes
 
 /**
  * Summary here; one sentence on one line (should not, but can exceed 80 chars).
@@ -1709,16 +1610,19 @@ In general, @file directives should not contain large descriptions, because thos
 
 For .install files, the following template is used:
 
-/**
- * @file
- * Install, update, and uninstall functions for the XXX module.
- */
+    /**
+     * @file
+     * Install, update, and uninstall functions for the XXX module.
+     */
+
 For files containing the definition of exactly one class/interface, use this template:
-/**
- * @file
- * Contains NameOfTheClass.
- */
-Documenting functions and methods
+
+    /**
+     * @file
+     * Contains NameOfTheClass.
+     */
+
+## Documenting functions and methods
 All functions and methods, whether meant to be private or public, should be documented. A function documentation block should immediately precede the declaration of the function itself. For example:
 
 /**
@@ -2990,607 +2894,12 @@ The function isset() returns TRUE when the variable is set to 0, but FALSE if th
 
 
 
-Drupal SimpleTest coding standards
 
-Last updated December 12, 2012. Created by Dave Reid on October 25, 2008.
-Edited by linclark, xjm, TravisCarden, aspilicious. Log in to edit this page.
 
-You should follow these conventions when writing a test.
 
-Naming conventions
-Drupal 8
 
-namespace Drupal\$module\Tests;
 
-use Drupal\simpletest\[Web|Unit|DrupalUnit]TestBase;
 
-Foo[Unit]Test extends [Web|Unit|DrupalUnit]TestBase
-Drupal 6/7
-
-Foo[Unit]Test extends [Web|Unit]TestCase
-File names
-
-For modules, a single [module name].test file is the general rule. It should be placed directly in the module folder.
-For core facilities (all API functions that are in includes/), tests files are named [facility name].test and are placed in the modules/system/tests folder.
-If other supporting files are required for the tests to work (for example, hidden modules, XML files, images) they should be located in a /tests/ subdirectory within the module directory.
-Mock module names
-
-If a test requires defining hooks, it can create a mock module.
-This module should be named [test file name]_test.module (its associated info file would then be [test file name]_test.info.
-Set the property hidden = TRUE in the .info file to prevent it from being enabled in the interface.
-Test function names
-
-All tests functions are prefixed with test.
-
-Splitting up your tests
-When you're unit testing a single function--as opposed to doing functional testing of a module's page--each test function should focus on a specific aspect of the function's operation. The "kitchen sink" style of tests is common in core right now but it's bad practice. Test should serve two purposes:
-
-ensure that the code operates in a certain way
-provide a runnable example of the code's usage
-Monolithic tests generally fail badly because once one portion of the tests fails it cascades through the later tests. This makes it hard to isolate exactly where the fault lies. By breaking the code up into separate tests you may duplicate some code--though if you're duplicating code between a majority of the tests it should probably go into the setUp() function--but you'll have an isolated test that passes or fails on its own.
-
-You also get several positive side effects by writing smaller tests:
-
-Each test becomes a simple, self-contained example of how the function can be used, answering the question "Given these inputs what behavior can I expect?"
-Since each test only looks at a single aspect you'll find that you're much more willing to test edge cases. Unlike kitchen sink test you won't have to worry about "breaking up the flow" with an extra test.
-Test template
-After the opening PHP tag and a blank line comes the @file declaration:
-
-<?php
-/**
- * @file
- * Tests for Aggregator module.
- */
-?>
-or
-
-<?php
-/**
- * @file
- * Tests for common.inc.
- */
-?>
-The @file declaration should contain a simple summary of what tests are included in the file. Either for the module, or for the file.
-
-<?php
-/**
- * Functional tests for the Kitten Basket.
- */
-class KittenBasketTestCase extends DrupalWebTestBase {
-?>
-The comment above the class is mandatory, it is a rephrasing of the 'name' of the test found in getInfo() function ('Kitten basket functionality' -> 'Functional tests for the Kitten basket').
-
-<?php
-  public static function getInfo() {
-    return array(
-      'name' => 'Kitten basket functionality',
-      'description' => 'Move kittens in and out of their basket and assert that none of them were hurt in the process.',
-      'group' => 'Kitten basket',
-    );
-  }
-?>
-The very first function has to be getInfo().
-name, description and group are not enclosed in t() calls.
-name should be short and should not contain any period. It should describes an overview of what subsystem is tested by the class; for example, "User access rules" or "Menu link creation/deletion"
-description should start with a verb describing the test. It should end with a period.
-group should be the human-readable name of the module (Node, Statistics), or the human-readable name of the Drupal facility tested (Form API or XML-RPC).
-There is no PHPDoc on this function since it is an inherited method.
-<?php
-  public function setUp() {
-    parent::setUp('kitten_module', 'basket_module');
-     // Setup tasks go here.
-  }
-?>
-setUp() is optional. If your test is for specific module(s), make sure to pass each module's name as a parameter to setUp() so it will be automatically enabled for you. If the module don't have to perform any particular setup, it should not be defined.
-setUp() and tearDown() are called before and after every test function is called.
-There is no PHPDoc on this function since it is an inherited method.
-<?php
-  public function tearDown() {
-    // Teardown tasks go here.
-     parent::tearDown();
-  }
-?>
-tearDown() should not be used, except in very particular cases. Simpletest will simply drop the test database, so you don't even have to undo the setup tasks performed in setUp().
-setUp() and tearDown() are called before and after every test function is called.
-There is no PHPDoc on this function since it is an inherited method.
-<?php
-  /**
-   * One-sentence description of what test entails.
-   */
-  public function testExampleThing() {
-    // Assertions, etc. go here.
-  }
-
-  /**
-   * One-sentence description of what test entails.
-   */
-  public function testNextExampleThing() {
-    // Assertions, etc. go here.
-  }
-  // Can have many more testFoo functions.
-}
-?>
-
-
-
-
-
-
-CSS coding standards
-
-Last updated January 7, 2013. Created by alanburke on August 31, 2008.
-Edited by JohnAlbin, sun, jhodgdon, aspilicious. Log in to edit this page.
-
-Status
-Draft. Drupal core (HEAD) should adhere to the latest conventions revision.
-Links
-CSS coding standards issues
-Drupal core "markup" component issues
-Originating groups.drupal.org discussion
-Initial proposal by Nick Lewis
-Write valid CSS
-All CSS code should be valid CSS, preferably to CSS 2.1. CSS 3.0 is acceptable too, provided the usage can be justified and the principles of graceful degradation / progressive enhancement are followed.
-
-Concise terminology used in these standards:
-
-selector {
-  property: value;
-}
-Selectors
-Selectors should
-
-be on a single line
-have a space after the previous selector
-end in an opening brace
-be closed with a closing brace on a separate line without indentation
-.book-navigation .page-next {
-}
-.book-navigation .page-previous {
-}
-
-.book-admin-form {
-}
-A blank line should be placed between each group, section, or block of multiple selectors of logically related styles.
-
-Multiple selectors
-
-Multiple selectors should each be on a single line, with no space after each comma:
-
-#forum td.posts,
-#forum td.topics,
-#forum td.replies,
-#forum td.pager {
-Properties
-All properties should be on the following line after the opening brace. Each property should:
-
-be on its own line
-be indented with two spaces, i.e., no tabs
-have a single space after the property name and before the property value
-end in a semi-colon
-#forum .description {
-  color: #efefef;
-  font-size: 0.9em;
-  margin: 0.5em;
-}
-Alphabetizing properties
-
-Multiple properties should be listed in alphabetical order.
-
-NOT OK:
-
-body {
-  font-weight: normal;
-  background: #000;
-  font-family: helvetica, sans-serif;
-  color: #FFF;
-}
-OK:
-
-body {
-  background: #000;
-  color: #fff;
-  font-family: helvetica, sans-serif;
-  font-weight: normal;
-}
-Colors (especially hex values) are preferred to be in lowercase.
-
-Properties with multiple values
-
-Where properties can have multiple values, each value should be separated with a space.
-
-  font-family: helvetica, sans-serif;
-CSS3 properties, vendor prefixes, progressive enhancement
-
-.progressive-enhancement {
-  background: #000 none;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#E5000000,endColorstr=#E5000000);
-  background-color: rgba(0, 0, 0, 0.9);
-}
-.progressive-prefixes {
-  background-color: #003471;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#003471), to(#448CCB));
-  background-image: -webkit-linear-gradient(top, #003471, #448CCB);
-  background-image: -moz-linear-gradient(top, #003471, #448CCB);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00003471,endColorstr=#00448CCB);
-  background-image: -ms-linear-gradient(top, #003471, #448CCB);
-  background-image: -o-linear-gradient(top, #003471, #448CCB);
-  background-image: linear-gradient(to bottom, #003471, #448CCB);
-}
-.vendor-prefixes {
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  -moz-box-shadow: 0 3px 20px #000;
-  filter: progid:DXImageTransform.Microsoft.Shadow(color=#000000, direction='180', strength='10');
-  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color=#000000, direction='180', strength='10')";
-  -webkit-box-shadow: 0 3px 20px #000;
-  box-shadow: 0 3px 20px #000;
-}
-Order all properties alphabetically.
-Group vendor-specific with their respective standard CSS3 properties.
-Order vendor-specific properties alphabetically.
-Declare vendor-specific properties before standard properties.
-Declare potentially unsupported values after known to be supported values (progressive enhancement). (see CSS spec)
-The special case of filter: should be grouped with ms-filter: and ordered before it (as in above example).
-
-Vendor specific extensions may cause browser inconsistencies when declaring CSS3 before the standard has reached recommended status (a.k.a. finalized). Do not take for granted that a -vendor-xyz-property is and works the same as the final xyz-property.
-
-It is recommended to avoid features of proprietary vendor extensions that are not supported by CSS3 standards.
-
-Comments
-In general, all comments should follow Drupal's common Doxygen formatting conventions to stay consistent with the rest of Drupal's code base. In areas, where those common conventions cannot be applied, we resort to the CSSDoc syntax (draft).
-
-In line with PHP coding standards, block level documentation should be used as follows, to describe a section of code below the comment.
-
-/**
- * Documentation here.
- */
-Further details on the common comment syntax may be found in the Doxygen formatting conventions.
-
-Shorter inline comments may be added after a property, preceded with a space:
-
-  background-position: 0.2em 0.2em; /* LTR */
-  padding-left: 2em; /* LTR */
-Right-To-Left
-Drupal supports conditional loading of CSS files with specific override rules for right-to-left languages. For a module, the override rule should be defined in a file named <module>-rtl.css (e.g., node-rtl.css). For a theme, the override rule should be defined in a file named style-rtl.css. The rule that is overridden should be commented in the default CSS rule.
-
-From node-rtl.css:
-
-#node-admin-buttons {
-  clear: left;
-  float: right;
-  margin-left: 0;
-  margin-right: 0.5em;
-}
-Rules in node.css which will be overridden if the rtl.css file is loaded:
-
-#node-admin-buttons {
-  clear: right; /* LTR */
-  float: left; /* LTR */
-  margin-left: 0.5em; /* LTR */
-}
-See also: http://drupal.org/node/132442#language-rtl
-
-As a rule of thumb, add a /* LTR */ comment in your style:
-
-when you use the keywords, 'left' or 'right' in a property, e.g. float: left;
-where you use unequal margin, padding or borders on the sides of a box, e.g.,
-margin-left: 1em;
-margin-right: 2em;
-where you specify the direction of the language, e.g. direction: ltr;
-‹ Drupal Markup Style GuideupDRAFT - CSS coding standards for Drupal 8 ›
-Login or register to post comments
-Looking for support? Visit the Drupal.org forums, or join #drupal-support in IRC.
-
-Comments
-about alphabetizing properties
-Posted by hkirsman on March 14, 2012 at 9:41am
-I think grouping properties together by theyr similarity is more logical and intuitive. Consider these examples when you'd want to change change positioning.
-
-/* Grouping properties by they similarity */
-.foo {
-  /* text  */
-  color: red;
-  font-size: 10px;
-  font-weight: bold;
-  /* Box model *
-  position: absolute;
-  bottom: 0;
-}
-
-/* Alphabetical ordering */
-.foo {
-  bottom: 0;
-  color: red;
-  font-size: 10px;
-  font-weight: bold;
-  position: absolute;
-}
-I think it's better to have position and bottom next to each rather putting one as the first property and other as the last.
-
-It's like going to bookshop where books are categorized first by their topic and then by theyr name.
-
-So lets start creating rules for this kind of grouping?
-
-More read here:
-http://www.impressivewebs.com/css-property-ordering/
-
-
-
-
-
-
-
-
-JavaScript coding standards
-
-Last updated September 8, 2012. Created by stella on August 31, 2007.
-Edited by xjm, sun, jhodgdon, sreynen. Log in to edit this page.
-
-Indenting
-Use an indent of 2 spaces, with no tabs. No trailing whitespace.
-
-String Concatenation
-Always use a space between the + and the concatenated parts to improve readability.
-
-var string = 'Foo' + bar;
-string = bar + 'foo';
-string = bar() + 'foo';
-string = 'foo' + 'bar';
-When using the concatenating assignment operator ('+='), use a space on each side as with the assignment operator:
-
-var string += 'Foo';
-string += bar;
-string += baz();
-CamelCasing
-Unlike the variables and functions defined in Drupal's PHP, multi-word variables and functions in JavaScript should be lowerCamelCased. The first letter of each variable or function should be lowercase, while the first letter of subsequent words should be capitalized. There should be no underscores between the words.
-
-Semi-colons
-JavaScript allows any expression to be used as a statement and uses semi-colons to mark the end of a statement. However, it attempts to make this optional with "semi-colon insertion", which can mask some errors and will also cause JS aggregation to fail. All statements should be followed by ; except for the following:
-
-for, function, if, switch, try, while
-
-The exceptions to this are functions declared like
-
-  Drupal.behaviors.tableSelect = function (context) {
-    // Statements...
-  };
-and
-
-  do {
-    // Statements...
-  } while (condition);
-These should all be followed by a semi-colon.
-
-In addition the return value expression must start on the same line as the return keyword in order to avoid semi-colon insertion.
-
-If the "Optimize JavaScript files" performance option in Drupal 6 is enabled, and there are missing semi-colons, then the JS aggregation will fail. It is therefore very important that semi-colons are used.
-
-Control Structures
-These include if, for, while, switch, etc. Here is an example if statement, since it is the most complicated of them:
-
-if (condition1 || condition2) {
-  action1();
-}
-else if (condition3 && condition4) {
-  action2();
-}
-else {
-  defaultAction();
-}
-Control statements should have one space between the control keyword and opening parenthesis, to distinguish them from function calls.
-
-You are strongly encouraged to always use curly braces even in situations where they are technically optional. Having them increases readability and decreases the likelihood of logic errors being introduced when new lines are added.
-
-switch
-
-For switch statements:
-
-switch (condition) {
-  case 1:
-    action1();
-    break;
-
-  case 2:
-    action2();
-    break;
-
-  default:
-    defaultAction();
-}
-try
-
-The try class of statements should have the following form:
-
-  try {
-    // Statements...
-  }
-  catch (error) {
-    // Error handling...
-  }
-  finally {
-    // Statements...
-  }
-for in
-
-The for in statement allows for looping through the names of all of the properties of an object. Unfortunately, all of the members which were inherited through the prototype chain will also be included in the loop. This has the disadvantage of serving up method functions when the interest is in data members. To prevent this, the body of every for in statement should be wrapped in an if statement that does filtering. It can select for a particular type or range of values, or it can exclude functions, or it can exclude properties from the prototype. For example:
-
-for (var variable in object) if (filter) {
-  // Statements...
-}
-You can use the hasOwnProperty method to distinguish the true members of the object:
-
-for (var variable in object) if (object.hasOwnProperty(variable)) {
-  // Statements...
-}
-Functions
-Function and method names
-
-Drupal.behaviors.tableDrag = function (context) {
-  for (var base in Drupal.settings.tableDrag) {
-    if (!$('#' + base + '.tabledrag-processed', context).size()) {
-      $('#' + base).filter(':not(.tabledrag-processed)').each(addBehavior);
-      $('#' + base).addClass('tabledrag-processed');
-    }
-  }
-};
-Functions and methods should be named in lowerCamelCase.
-Function names should begin with the name of the module or theme declaring the function to avoid collisions.
-Function Declarations
-
-Drupal.behaviors.tableDrag = function (context) {
-  ...
-  div.onclick = function (e) {
-    return false;
-  };
-  ...
-};
-
-function funStuff(field, settings) {
-  settings = settings || Drupal.settings;
-  alert("This JS file does fun message popups.");
-  return field;
-}
-There should be no space between the function name and the following left parenthesis.
-Exception: If a function literal is anonymous, there should be a single space between the word "function" and the left parenthesis "(". Otherwise, it can appear that the function's name is actually "function".
-Define optional arguments (using default values) at the end of the function signature.
-Always attempt to return a meaningful value from a function if one is appropriate.
-Note: The above examples code are lacking JSDoc and comments, only for clarity.
-
-Function Calls
-
-Functions should be called with no spaces between the function name, the opening parenthesis, and the first parameter; spaces between commas and each parameter, and no space between the last parameter, the closing parenthesis, and the semicolon. Here's an example:
-
-foobar = foo(bar, baz, quux);
-
-As displayed above, there should be one space on either side of an equals sign used to assign the return value of a function to a variable. In the case of a block of related assignments, more space may be inserted to promote readability:
-short        = foo(bar);
-longVariable = foo(baz);
-Variables and Arrays
-All variables should be declared with var before they are used and should only be declared once. Doing this makes the program easier to read and makes it easier to detect undeclared variables that may become implied globals.
-
-Variables should not be defined in the global scope; try to define them in a local function scope at all costs. All variables should be declared at the beginning of a function.
-
-Constants and Global Variables
-
-lowerCamelCasing should be used for pre-defined constants. Unlike the PHP standards, you should use lowercase true, false and null as the uppercase versions are not valid in JS.
-
-Variables added through drupal_add_js() should also be lowerCamelCased, so that they can be consistent with other variables once they are used in JavaScript.
-
-<?php
-drupal_add_js(array('myModule' => array('basePath' => base_path())), 'setting');
-?>
-This variable would then be referenced:
-
-Drupal.settings.myModule.basePath;
-Arrays
-
-Arrays should be formatted with a space separating each element and assignment operator, if applicable:
-
-someArray = ['hello', 'world'];
-Note that if the line spans longer than 80 characters (often the case with form and menu declarations), each element should be broken into its own line, and indented one level:
-
-Note there is no comma at the end of the last array element. This is different from the PHP coding standards.. Having a comma on the last array element in JS will cause an exception to occur.
-
-Comments
-Inline documentation for source files should follow the Doxygen formatting conventions.
-
-Non-documentation comments are strongly encouraged. A general rule of thumb is that if you look at a section of code and think "Wow, I don't want to try and describe that", you need to comment it before you forget how it works. Comments can be removed by JS compression utilities later, so they don't negatively impact on the file download size.
-
-Non-documentation comments should use capitalized sentences with punctuation. All caps are used in comments only when referencing constants, e.g., TRUE. Comments should be on a separate line immediately before the code line or block they reference. For example:
-
-// Unselect all other checkboxes.
-
-If each line of a list needs a separate comment, the comments may be given on the same line and may be formatted to a uniform indent for readability.
-C style comments (/* */) and standard C++ comments (//) are both fine.
-
-JS code placement
-JavaScript code should not be embedded in the HTML where possible, as it adds significantly to page weight with no opportunity for mitigation by caching and compression.
-
-"with" statement
-The with statement was intended to provide a shorthand for accessing members in deeply nested objects. For example, it is possible to use the following shorthand (but not recommended) to access foo.bar.foobar.abc, etc:
-
-with (foo.bar.foobar) {
-  var abc = true;
-  var xyz = true;
-}
-However it's impossible to know by looking at the above code which abc and xyz will get modified. Does foo.bar.foobar get modified? Or is it the global variables abc and xyz?
-
-Instead you should use the explicit longer version:
-
-foo.bar.foobar.abc = true;
-foo.bar.foobar.xyz = true;
-or if you really want to use a shorthand, use the following alternative method:
-
-  var o = foo.bar.foobar;
-  o.abc = true;
-  o.xyz = true;
-Operators
-True or false comparisons
-
-The == and != operators do type coercion before comparing. This is bad because it causes:
-' \t\r\n' == 0
-to be true. This can mask type errors. When comparing to any of the following values, use the === or !== operators, which do not do type coercion:
-0 '' undefined null false true
-
-Comma Operator
-
-The comma operator causes the expressions on either side of it to be executed in left-to-right order, and returns the value of the expression on the right, and should be avoided. Example usage is:
-
-var x = (y = 3, z = 9);
-
-This sets x to 9. This can be confusing for users not familiar with the syntax and makes the code more difficult to read and understand. So avoid the use of the comma operator except for in the control part of for statements. This does not apply to the comma separator (used in object literals, array literals, etc.)
-Avoiding unreachable code
-To prevent unreachable code, a return, break, continue, or throw statement should be followed by a } or case or default.
-
-Constructors
-Constructors are functions that are designed to be used with the new prefix. The new prefix creates a new object based on the function's prototype, and binds that object to the function's implied this parameter. JavaScript doesn't issue compile-time warning or run-time warnings if a required new is omitted. If you neglect to use the new prefix, no new object will be made and this will be bound to the global object (bad). Constructor functions should be given names with an initial uppercase and a function with an initial uppercase name should not be called unless it has the new prefix.
-
-Use literal expressions
-Use literal expressions instead of the new operator:
-
-Instead of new Array() use []
-Instead of new Object() use {}
-Don't use the wrapper forms new Number, new String, new Boolean.
-In most cases, the wrapper forms should be the same as the literal expressions. However, this isn't always the case, take the following as an example:
-
-var literalNum = 0;
-var objectNum = new Number(0);
-if (literalNum) { } // false because 0 is a false value, will not be executed.
-if (objectNum) { }  // true because objectNum exists as an object, will be executed.
-if (objectNum.valueOf()) { } // false because the value of objectNum is 0.
-eval is evil
-eval() is evil. It effectively requires the browser to create an entirely new scripting environment (just like creating a new web page), import all variables from the current scope, execute the script, collect the garbage, and export the variables back into the original environment. Additionally, the code cannot be cached for optimization purposes. It is probably the most powerful and most misused method in JavaScript. It also has aliases. So do not use the Function constructor and do not pass strings to setTimeout() or setInterval() .
-
-Preventing XSS
-All output to the browser that has been provided by a user should be run through the Drupal.checkPlain() function first. This is similar to Drupal's PHP check_plain() and encodes special characters in a plain-text string for display as HTML.
-
-Typeof
-When using a typeof check, don't use the parenthesis for the typeof. The following is the correct coding standard:
-
-if (typeof myVariable == 'string') {
-  // ...
-}
-Modifying the DOM
-When adding new HTML elements to the DOM, don't use document.createElement(). For cross-browser compatibility reasons and also in an effort to reduce file size, you should use the jQuery equivalent.
-
-Don't:
-
-this.popup = document.createElement('div');
-this.popup.id = 'autocomplete';
-
-Do:
-this.popup = $('<div id="autocomplete"></div>')[0];
-Drupal 6 (and later) Specific Stuff
-Drupal 6 saw the introduction of JavaScript theming and translation of JavaScript files.
-
-Theming
-
-There is a theming mechanism for JavaScript code. Any modules containing JavaScript which produces HTML content must now provide default theme functions in the Drupal.theme.prototype namespace.
-
-String Translation
-
-All strings in JavaScript files should be wrapped in Drupal.t() which is an equivalent of the well-known t() function. Likewise, there is also an equivalent to format_plural(), named Drupal.formatPlural(). The parameter order is exactly like their server-side counterparts.
 
 
 

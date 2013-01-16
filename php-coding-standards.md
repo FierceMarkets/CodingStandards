@@ -1,29 +1,30 @@
-# Casting
-Put a space between the (type) and the $variable in a cast: (int) $mynumber.
+
+# IDE Settings
+
+## Vim
+
+Here are Vim rules for indenting:
+
+    set expandtab
+    set shiftwidth=4
+    set softtabstop=4
+    set tabstop=4
+
+## Sublime Text 2
+
+Add these to your **Sublime Text 2** User Preferences.
+
+    {
+        "default_line_ending": "unix",
+        "ensure_newline_at_eof_on_save": true,
+        "tab_size": 2,
+        "translate_tabs_to_spaces": true,
+        "trim_trailing_white_space_on_save": true
+    }
 
 ---
 
-# TRUE, FALSE, NULL, or true, false, null?
-
-*Pear* - All lowercase.
-
-*Drupal* - All uppercase.
-
-*PSR-2* - The PHP constants `true`, `false`, and `null` MUST be in lower case.
-
----
-
-# Keywords
-
-PHP [keywords][] MUST be in lower case.
-
-[keywords]: http://php.net/manual/en/reserved.keywords.php
-
----
-
-# Indenting, Line Length, and Whitespace
-
-## 2 space tabs or 4 space tabs?
+## Indenting - 2 space tabs or 4 space tabs?
 
 *PSR-2* - Code MUST use an indent of 4 spaces, and MUST NOT use tabs for indenting.
 
@@ -39,38 +40,25 @@ PHP [keywords][] MUST be in lower case.
 
 This helps to avoid problems with diffs, patches, version control history and annotations.
 
+---
+
+# Line Endings
+
 Files should be formatted with \n as the line ending (Unix line endings), not \r\n (Windows line endings).
 
 All text files should end in a single newline (\n). This avoids the verbose "\ No newline at end of file" patch warning and makes patches easier to read since it's clearer what is being changed when lines are added to the end of a file.
 
-## Vim Settings
+---
 
-Here are Vim rules for indenting:
-
-    set expandtab
-    set shiftwidth=4
-    set softtabstop=4
-    set tabstop=4
-
-## Sublime Text 2 Settings
-
-Add these to your **Sublime Text 2** User Preferences.
-
-    {
-        "default_line_ending": "unix",
-        "ensure_newline_at_eof_on_save": true,
-        "tab_size": 2,
-        "translate_tabs_to_spaces": true,
-        "trim_trailing_white_space_on_save": true
-    }
-
-## Whitespace
+# Whitespace
 
 *PSR-2* - There MUST NOT be trailing whitespace at the end of non-blank lines.
 
 *PSR-2* - Blank lines MAY be added to improve readability and to indicate related blocks of code.
 
-## Line Length
+---
+
+# Line Length
 
 *PSR-2* - There MUST NOT be a hard limit on line length; the soft limit MUST be 120 characters; lines SHOULD be 80 characters or less. Lines longer than that SHOULD be split into multiple subsequent lines of no more than 80 characters each.
 
@@ -118,9 +106,74 @@ Instead, it is recommended practice to split out and prepare the conditions sepa
 
 Note: This example is still a bit dense. Always consider and decide on your own whether people unfamiliar with your code will be able to make sense of the logic.
 
-## More
+---
+
+# Statements per Line
 
 *PSR-2* - There MUST NOT be more than one statement per line.
+
+---
+
+# File Formats
+
+All PHP files MUST use the Unix LF (linefeed) line ending.
+
+All PHP files MUST end with a single blank line.
+
+The closing `?>` tag MUST be omitted from files containing only PHP.
+
+All PHP files MUST be stored as ASCII text
+
+All PHP files MUST use UTF-8 character encoding without BOM.  Whatever "without BOM" means.
+
+All PHP files SHOULD *Either* declare symbols (classes, functions, constants, etc.) *or* cause side-effects (e.g. generate output, change .ini settings, etc.) but SHOULD NOT do both.
+
+## Side Effects
+
+A file SHOULD declare new symbols (classes, functions, constants, etc.) and cause no other side effects, or it SHOULD execute logic with side effects, but SHOULD NOT do both.
+
+The phrase "side effects" means execution of logic not directly related to declaring classes, functions, constants, etc., *merely from including the file*.
+
+"Side effects" include but are not limited to: generating output, explicit use of `require` or `include`, connecting to external services, modifying ini settings, emitting errors or exceptions, modifying global or static variables, reading from or writing to a file, and so on.
+
+The following is an example of a file with both declarations and side effects; i.e, an example of what to avoid:
+
+```php
+<?php
+// side effect: change ini settings
+ini_set('error_reporting', E_ALL);
+
+// side effect: loads a file
+include "file.php";
+
+// side effect: generates output
+echo "<html>\n";
+
+// declaration
+function foo()
+{
+    // function body
+}
+```
+
+The following example is of a file that contains declarations without side effects; i.e., an example of what to emulate:
+
+```php
+<?php
+// declaration
+function foo()
+{
+    // function body
+}
+
+// conditional declaration is *not* a side effect
+if (! function_exists('bar')) {
+    function bar()
+    {
+        // function body
+    }
+}
+
 
 ---
 
@@ -143,11 +196,11 @@ Control structure keywords MUST have one space between the control keyword and o
 
 
 
-### `if`, `elseif`, `else`
+## `if`, `elseif`, `else`
 
 The keyword `elseif` MUST be used instead of `else if` so that all control keywords look like single words.
 
-#### Drupal and Pear if/elseif/else structure
+### Drupal and Pear if/elseif/else structure
 
 Note the elseif and else are on new lines.
 
@@ -161,7 +214,7 @@ Note the elseif and else are on new lines.
       defaultaction;
     }
 
-#### PSR if/elseif/else structure
+### PSR if/elseif/else structure
 
 An `if` structure looks like the following. Note the placement of parentheses, spaces, and braces; and that `else` and `elseif` are on the same line as the closing brace from the earlier body.
 
@@ -177,7 +230,7 @@ if ($expr1) {
 ```
 
 
-### `switch`, `case`
+## `switch`, `case`
 
 A `switch` structure looks like the following. Note the placement of parentheses, spaces, and braces. The `case` statement MUST be indented once from `switch`, and the `break` keyword (or other terminating keyword) MUST be indented at the same level as the `case` body. There MUST be a comment such as
 `// no break` when fall-through is intentional in a non-empty `case` body.
@@ -203,7 +256,7 @@ switch ($expr) {
 ```
 
 
-### `while`, `do while`
+## `while`, `do while`
 
 A `while` statement looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -225,7 +278,7 @@ do {
 
 
 
-### `for`
+## `for`
 
 A `for` statement looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -236,7 +289,7 @@ for ($i = 0; $i < 10; $i++) {
 }
 ```
 
-### `foreach`
+## `foreach`
     
 A `foreach` statement looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -247,9 +300,9 @@ foreach ($iterable as $key => $value) {
 }
 ```
 
-### `try`, `catch`
+## `try`, `catch`
 
-#### PSR try-catch
+### PSR try-catch
 
 A `try catch` block looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -264,7 +317,7 @@ try {
 }
 ```
 
-#### Drupal Try-catch blocks
+### Drupal Try-catch blocks
 
 try-catch blocks should follow a similar line-breaking pattern to if-else statements, with each catch statement beginning a new line.
 
@@ -542,6 +595,8 @@ Note that if the class name is a variable, the variable will be evaluated first 
         return $val;
     }
     ?>
+
+*PSR* - Has no opinion.
 
 Arguments with default values go at the end of the argument list. Always attempt to return a meaningful value from a function if one is appropriate. Here is a slightly longer example:
 
@@ -835,7 +890,7 @@ use OtherVendor\OtherPackage\BazClass;
 ```
 
 
-## Class and Namespaces based on PSR 0
+## Classes and Namespaces based on PSR 0
 
 The following describes the mandatory requirements that must be adhered to for autoloader interoperability.
 
@@ -1140,68 +1195,6 @@ Note that const does not work with PHP expressions. define() should be used when
     ?>
 ---
 
-# File Formats
-
-All PHP files MUST use the Unix LF (linefeed) line ending.
-
-All PHP files MUST end with a single blank line.
-
-The closing `?>` tag MUST be omitted from files containing only PHP.
-
-All PHP files MUST be stored as ASCII text
-
-All PHP files MUST use UTF-8 character encoding without BOM.  Whatever "without BOM" means.
-
-All PHP files SHOULD *Either* declare symbols (classes, functions, constants, etc.) *or* cause side-effects (e.g. generate output, change .ini settings, etc.) but SHOULD NOT do both.
-
-## Side Effects
-
-A file SHOULD declare new symbols (classes, functions, constants, etc.) and cause no other side effects, or it SHOULD execute logic with side effects, but SHOULD NOT do both.
-
-The phrase "side effects" means execution of logic not directly related to declaring classes, functions, constants, etc., *merely from including the file*.
-
-"Side effects" include but are not limited to: generating output, explicit use of `require` or `include`, connecting to external services, modifying ini settings, emitting errors or exceptions, modifying global or static variables, reading from or writing to a file, and so on.
-
-The following is an example of a file with both declarations and side effects; i.e, an example of what to avoid:
-
-```php
-<?php
-// side effect: change ini settings
-ini_set('error_reporting', E_ALL);
-
-// side effect: loads a file
-include "file.php";
-
-// side effect: generates output
-echo "<html>\n";
-
-// declaration
-function foo()
-{
-    // function body
-}
-```
-
-The following example is of a file that contains declarations without side effects; i.e., an example of what to emulate:
-
-```php
-<?php
-// declaration
-function foo()
-{
-    // function body
-}
-
-// conditional declaration is *not* a side effect
-if (! function_exists('bar')) {
-    function bar()
-    {
-        // function body
-    }
-}
-
-
----
 
 # Best practices from Pear
 There are other things not covered by PEAR Coding Standards which are mostly subject of personal preference and not directly related to readability of the code. Things like "single quotes vs double quotes" are features of PHP itself to make programming easier and there are no reasons not use one way in preference to another. Such best practices are left solely on developer to decide. The only recommendation could be made to keep consistency within package and respect personal style of other developers.
@@ -1633,7 +1626,6 @@ Example:
     ?>
 
 
-
 ## Exception Inheritance
 
 PHP requires that all exceptions inherit off of the Exception class, either directly or indirectly.
@@ -1662,6 +1654,19 @@ When creating a new exception class, it should be named according to the subsyst
     }
     // Optionally also catch Exception so that all exceptions stop here instead of propagating up.
     ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -1760,13 +1765,16 @@ $foo->bar(
 
 ---
 
-# E_STRICT-compatible code
+
+# Error Levels
+
+## Pear - E_STRICT-compatible code
 Starting on 01 January 2007, all new code that is suggested for inclusion into PEAR must be E_STRICT-compatible. This means that it must not produce any warnings or errors when PHP's error reporting level is set to E_ALL | E_STRICT.
 
 ---
 
 
-# Drupal - Write E_ALL compliant code
+## Drupal - Write E_ALL compliant code
 
 Adjusting the error reporting level
 Drupal 6.x releases ignore E_NOTICE, E_STRICT, and E_DEPRECATED notices for the benefit of production sites. To view all PHP errors on development or testing sites, you may change includes/common.inc from:
@@ -1841,6 +1849,31 @@ Even though the array $form is already declared and passed to the function, each
 The function isset() returns TRUE when the variable is set to 0, but FALSE if the variable is set to NULL. In some cases, is_null() is a better choice, especially when testing the value of a variable returned by an SQL query.
 
 ---
+
+# TRUE, FALSE, NULL, or true, false, null?
+
+*Pear* - All lowercase.
+
+*Drupal* - All uppercase.
+
+*PSR-2* - The PHP constants `true`, `false`, and `null` MUST be in lower case.
+
+---
+
+# Keywords
+
+PHP [keywords][] MUST be in lower case.
+
+[keywords]: http://php.net/manual/en/reserved.keywords.php
+
+---
+
+
+# Casting
+Put a space between the (type) and the $variable in a cast: (int) $mynumber.
+
+---
+
 
 # Use Master Functions instead of Function Aliases
 

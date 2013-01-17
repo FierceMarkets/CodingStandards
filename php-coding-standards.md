@@ -1,25 +1,25 @@
-# Standard Coding Standard
+# Standard Coding Standards
+
+This guide is heavily inspired by the guidelines from [PHP-FIG](http://www.php-fig.org/), [the Drupal Coding Standards](http://drupal.org/coding-standards), and [the PEAR coding standards](http://pear.php.net/manual/en/standards.php).
 
 The intent of this guide is to reduce cognitive friction when scanning code from different authors. It does so by enumerating a shared set of rules and expectations about how to format PHP code.
 
-The style rules herein are derived from commonalities among the various member projects. When various authors collaborate across multiple projects, it helps to have one set of guidelines to be used among all those projects. Thus, the
-benefit of this guide is not in the rules themselves, but in the sharing of those rules.
+The style rules herein are derived from commonalities among the various PHP-FIG member projects. When various authors collaborate across multiple projects, it helps to have one set of guidelines to be used among all those projects.
 
 [PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
 
+---
 
-2. Files
---------
-
+# Files
 
 All PHP files MUST use the Unix LF (linefeed) line ending.
 
-All PHP files MUST end with a single blank line.
+All PHP files MUST end with a single blank line. This avoids the verbose "\ No newline at end of file" patch warning and makes patches easier to read since it's clearer what is being changed when lines are added to the end of a file.
 
 
-### 2.1. PHP Tags
+## PHP Tags
 
 PHP code MUST use the long `<?php ?>` tags or the short-echo `<?= ?>` tags; it MUST NOT use the other tag variations.
 
@@ -32,12 +32,45 @@ Note that the ?> at the end of code files is purposely omitted. This includes mo
 PHP.net itself removes the closing delimiter from the end of its files, so this can be seen as a "best practice."
 
 
-
-### 2.2. Character Encoding
+## Character Encoding
 
 PHP code MUST use only UTF-8 without BOM.
 
-### 2.3. Side Effects
+
+## Lines
+
+There MUST NOT be a hard limit on line length.
+
+The soft limit on line length MUST be 120 characters; automated style checkers MUST warn but MUST NOT error at the soft limit.
+
+Lines SHOULD NOT be longer than 80 characters; lines longer than that SHOULD be split into multiple subsequent lines of no more than 80 characters each.
+
+There MUST NOT be trailing whitespace at the end of non-blank lines.
+
+Blank lines MAY be added to improve readability and to indicate related blocks of code.
+
+There MUST NOT be more than one statement per line.
+
+
+
+## Indenting
+
+Code MUST use an indent of 4 spaces, and MUST NOT use tabs for indenting.
+
+> N.b.: Using only spaces, and not mixing spaces with tabs, helps to avoid
+> problems with diffs, patches, history, and annotations. The use of spaces
+> also makes it easy to insert fine-grained sub-indentation for inter-line 
+> alignment.
+
+
+*Pear* - Use an indent of 4 spaces, with no tabs.
+
+*Drupal* - Use an indent of 2 spaces, with no tabs.
+
+
+
+
+## Side Effects
 
 A file SHOULD declare new symbols (classes, functions, constants, etc.) and cause no other side effects, or it SHOULD execute logic with side effects, but SHOULD NOT do both.
 
@@ -84,9 +117,9 @@ if (! function_exists('bar')) {
 }
 ```
 
+---
 
-3. Namespace and Class Names
-----------------------------
+# Namespace and Class Names
 
 Namespaces and classes SHOULD follow [PSR-0][].
 
@@ -118,7 +151,7 @@ class Fierce_Model_Foo
 }
 ```
 
-
+---
 
 
 # Class Definitions
@@ -155,41 +188,21 @@ Note that if the class name is a variable, the variable will be evaluated first 
 
 
 
+---
 
 
 
-
-4. Class Constants, Properties, and Methods
--------------------------------------------
-
-The term "class" refers to all classes, interfaces, and traits.
-
-
-
-4. Classes, Properties, and Methods
------------------------------------
+# Class Constants, Properties, and Methods
 
 The term "class" refers to all classes, interfaces, and traits.
 
+Classes should be given descriptive names. Avoid using abbreviations where possible.
+
+*Drupal* - See this [Drupal page on Object Oriented Code](http://drupal.org/node/608152)
 
 
 
-
-*Drupal* - See http://drupal.org/node/608152
-
-
-
-
-Classes should be given descriptive names. Avoid using abbreviations where possible. Class names should always begin with an uppercase letter. The PEAR class hierarchy is also reflected in the class name, each level of the hierarchy separated with a single underscore. Examples of good class names are:
-
-    Log
-    Net_Finger
-    HTML_Upload_Error
-
-
-
-
-### 4.1. Extends and Implements
+## Extends and Implements
 
 The `extends` and `implements` keywords MUST be declared on the same line as the class name.
 
@@ -230,12 +243,12 @@ class ClassName extends ParentClass implements
 
 
 
-
-### 4.5. `abstract`, `final`, and `static`
+## `abstract`, `final`, and `static`
 
 When present, the `abstract` and `final` declarations MUST precede the visibility declaration.
 
 When present, the `static` declaration MUST come after the visibility declaration.
+
 
 ```php
 <?php
@@ -254,7 +267,7 @@ abstract class ClassName
 }
 ```
 
-### 4.6. Method and Function Calls
+## Method and Function Calls
 
 When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis, there MUST NOT be a space after the opening parenthesis, and there MUST NOT be a space before the
 closing parenthesis. In the argument list, there MUST NOT be a space before each comma, and there MUST be one space after each comma.
@@ -279,22 +292,7 @@ $foo->bar(
 
 
 
-### Class Member Visibility
-
-The use of public properties is strongly discouraged, as it allows for unwanted side effects. It also exposes implementation specific details, which in turn makes swapping out a class for another implementation (one of the key reasons to use objects) much harder. Properties should be considered internal to a class.
-
-The use of private methods or properties is strongly discouraged. Private properties and methods may not be accessed or overridden by child classes, which limits the ability of other developers to extend a class to suit their needs.
-
-
-
-
-
-
-
-
-
-
-### 4.1. Constants
+## Class Constants
 
 Class constants MUST be declared in all upper case with underscore separators.
 For example:
@@ -310,7 +308,7 @@ class Foo
 }
 ```
 
-### 4.2. Properties
+## Properties
 
 Visibility MUST be declared on all properties.
 
@@ -336,7 +334,7 @@ class ClassName
 
 
 
-### 4.3. Methods
+## Methods
 
 Visibility MUST be declared on all methods.
 
@@ -361,7 +359,7 @@ class ClassName
 }
 ```    
 
-### 4.4. Method Arguments
+## Method Arguments
 
 In the argument list, there MUST NOT be a space before each comma, and there MUST be one space after each comma.
 
@@ -408,53 +406,7 @@ class ClassName
 
 ---
 
-
-Coding Style Guide
-==================
-
-
-2. General
-----------
-
-### 2.3. Lines
-
-There MUST NOT be a hard limit on line length.
-
-The soft limit on line length MUST be 120 characters; automated style checkers MUST warn but MUST NOT error at the soft limit.
-
-Lines SHOULD NOT be longer than 80 characters; lines longer than that SHOULD be split into multiple subsequent lines of no more than 80 characters each.
-
-There MUST NOT be trailing whitespace at the end of non-blank lines.
-
-Blank lines MAY be added to improve readability and to indicate related blocks of code.
-
-There MUST NOT be more than one statement per line.
-
----
-Files should be formatted with \n as the line ending (Unix line endings), not \r\n (Windows line endings).
-
-All text files should end in a single newline (\n). This avoids the verbose "\ No newline at end of file" patch warning and makes patches easier to read since it's clearer what is being changed when lines are added to the end of a file.
-
----
-
-
-### 2.4. Indenting
-
-Code MUST use an indent of 4 spaces, and MUST NOT use tabs for indenting.
-
-> N.b.: Using only spaces, and not mixing spaces with tabs, helps to avoid
-> problems with diffs, patches, history, and annotations. The use of spaces
-> also makes it easy to insert fine-grained sub-indentation for inter-line 
-> alignment.
-
-
-*Pear* - Use an indent of 4 spaces, with no tabs.
-
-*Drupal* - Use an indent of 2 spaces, with no tabs.
-
-
-
-### 2.5. Keywords and True/False/Null
+## Keywords and True/False/Null
 
 PHP [keywords][] MUST be in lower case.
 
@@ -468,8 +420,7 @@ The PHP constants `true`, `false`, and `null` MUST be in lower case.
 
 
 
-3. Namespace and Use Declarations
----------------------------------
+# Namespace and Use Declarations
 
 When present, there MUST be one blank line after the `namespace` declaration.
 
@@ -494,7 +445,7 @@ use OtherVendor\OtherPackage\BazClass;
 ```
 
 
-
+---
 
 
 # Function Calls
@@ -581,23 +532,16 @@ The same applies not only for parameter variables, but also for nested function 
 
 Nesting those function parameters is allowed if it helps to make the code more readable, not only when it is necessary when the characters per line limit is reached.
 
+---
 
-## Alignment of assignments
+# Assignments
 
-To support readability, the equal signs may be aligned in block-related assignments:
+To support readability, the equal signs MAY be aligned in block-related assignments:
 
     <?php
     
     $short  = foo($bar);
     $longer = foo($baz);
-    ?>
-
-The rule can be broken when the length of the variable name is at least 8 characters longer/shorter than the previous one:
-
-    <?php
-    
-    $short = foo($bar);
-    $thisVariableNameIsVeeeeeeeeeeryLong = foo($baz);
     ?>
 
 ## Split long assigments onto several lines
@@ -610,7 +554,6 @@ Assigments may be split onto several lines when the character/line limit would b
         = $this->xajax->getJavascript(t3lib_extMgm::siteRelPath('nr_xajax'));
     ?>
 
----
 ---
 
 # Function Definitions
@@ -635,7 +578,7 @@ Assigments may be split onto several lines when the character/line limit would b
     }
     ?>
 
-*PSR* - Has no opinion.
+*PSR* - Has no opinion on the function definition formatting.
 
 Arguments with default values go at the end of the argument list. Always attempt to return a meaningful value from a function if one is appropriate. Here is a slightly longer example:
 
@@ -656,25 +599,8 @@ Arguments with default values go at the end of the argument list. Always attempt
     }
     ?>
 
-## Split function definitions onto several lines
 
-Functions with many parameters may need to be split onto several lines to keep the 80 characters/line limit. The first parameters may be put onto the same line as the function name if there is enough space. Subsequent parameters on following lines are to be indented 4 spaces. The closing parenthesis and the opening brace are to be put onto the next line, on the same indentation level as the "function" keyword.
-
-    <?php
-    
-    function someFunctionWithAVeryLongName($firstParameter = 'something', $secondParameter = 'booooo',
-        $third = null, $fourthParameter = false, $fifthParameter = 123.12,
-        $sixthParam = true
-    ) {
-        //....
-    ?>
-
-
-
-
-
-5. Control Structures
----------------------
+# Control Structures
 
 The general style rules for control structures are as follows:
 
@@ -688,7 +614,7 @@ The general style rules for control structures are as follows:
 The body of each structure MUST be enclosed by braces. This standardizes how the structures look, and reduces the likelihood of introducing errors as new lines get added to the body.
 
 
-### 5.1. `if`, `elseif`, `else`
+## `if`, `elseif`, `else`
 
 An `if` structure looks like the following. Note the placement of parentheses, spaces, and braces; and that `else` and `elseif` are on the same line as the closing brace from the earlier body.
 
@@ -706,7 +632,7 @@ if ($expr1) {
 The keyword `elseif` SHOULD be used instead of `else if` so that all control keywords look like single words.
 
 
-### 5.2. `switch`, `case`
+## `switch`, `case`
 
 A `switch` structure looks like the following. Note the placement of parentheses, spaces, and braces. The `case` statement MUST be indented once from `switch`, and the `break` keyword (or other terminating keyword) MUST be indented at the same level as the `case` body. There MUST be a comment such as
 `// no break` when fall-through is intentional in a non-empty `case` body.
@@ -732,7 +658,7 @@ switch ($expr) {
 ```
 
 
-### 5.3. `while`, `do while`
+## `while`, `do while`
 
 A `while` statement looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -752,7 +678,7 @@ do {
 } while ($expr);
 ```
 
-### 5.4. `for`
+## `for`
 
 A `for` statement looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -763,7 +689,7 @@ for ($i = 0; $i < 10; $i++) {
 }
 ```
 
-### 5.5. `foreach`
+## `foreach`
     
 A `foreach` statement looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -774,7 +700,7 @@ foreach ($iterable as $key => $value) {
 }
 ```
 
-### 5.6. `try`, `catch`
+## `try`, `catch`
 
 A `try catch` block looks like the following. Note the placement of parentheses, spaces, and braces.
 
@@ -791,7 +717,7 @@ try {
 
 
   
-### Drupal - Alternate control statement syntax for templates
+## Drupal - Alternate control statement syntax for templates
 
 In templates (ex. .tpl.php files), the alternate control statement syntax using : instead of brackets is allowed. Note that there should not be a space between the closing paren after the control keyword, and the colon, and HTML/PHP inside the control structure should be indented. For example:
 
@@ -804,59 +730,12 @@ In templates (ex. .tpl.php files), the alternate control statement syntax using 
     <?php endforeach; ?>
 
 
-
-### Pear and Drupal - Split long if statements onto several lines
-
-Long if statements may be split onto several lines when the character/line limit would be exceeded. The conditions have to be positioned onto the following line, and indented 4 characters. The logical operators (&&, ||, etc.) should be at the beginning of the line to make it easier to comment (and exclude) the condition. The closing parenthesis and opening brace get their own line at the end of the conditions.
-
-Keeping the operators at the beginning of the line has two advantages: It is trivial to comment out a particular line during development while keeping syntactically correct code (except of course the first line). Further is the logic kept at the front where it's not forgotten. Scanning such conditions is very easy since they are aligned below each other.
-
-    <?php
-    
-    if (($condition1
-        || $condition2)
-        && $condition3
-        && $condition4
-    ) {
-        //code here
-    }
-    ?>
-    The first condition may be aligned to the others.
-    
-    <?php
-    
-    if (   $condition1
-        || $condition2
-        || $condition3
-    ) {
-        //code here
-    }
-    ?>
-
-The best case is of course when the line does not need to be split. When the if clause is really long enough to be split, it might be better to simplify it. In such cases, you could express conditions as variables an compare them in the if() condition. This has the benefit of "naming" and splitting the condition sets into smaller, better understandable chunks:
-
-    <?php
-    
-    $is_foo = ($condition1 || $condition2);
-    $is_bar = ($condition3 && $condtion4);
-    if ($is_foo && $is_bar) {
-        // ....
-    }
-    ?>
-
-There were suggestions to indent the parantheses "groups" by 1 space for each grouping. This is too hard to achieve in your coding flow, since your tab key always produces 4 spaces. Indenting the if clauses would take too much finetuning.
-
-
-
-
-
 ---
 
 
 
 
-6. Closures
------------
+# Closures
 
 Closures MUST be declared with a space after the `function` keyword, and a space before and after the `use` keyword.
 
@@ -947,30 +826,6 @@ $foo->bar(
 );
 ```
 --
-
-
-# IDE Settings
-
-## Vim
-
-Here are Vim rules for indenting:
-
-    set expandtab
-    set shiftwidth=4
-    set softtabstop=4
-    set tabstop=4
-
-## Sublime Text 2
-
-Add these to your **Sublime Text 2** User Preferences.
-
-    {
-        "default_line_ending": "unix",
-        "ensure_newline_at_eof_on_save": true,
-        "tab_size": 4,
-        "translate_tabs_to_spaces": true,
-        "trim_trailing_white_space_on_save": true
-    }
 
 
 
@@ -1615,3 +1470,12 @@ Put a space between the (type) and the $variable in a cast: (int) $mynumber.
 
 For example, use implode() instead of join(). See http://php.net/manual/en/aliases.php
 
+---
+
+
+
+## Class Member Visibility
+
+The use of public properties is strongly discouraged, as it allows for unwanted side effects. It also exposes implementation specific details, which in turn makes swapping out a class for another implementation (one of the key reasons to use objects) much harder. Properties should be considered internal to a class.
+
+The use of private methods or properties is strongly discouraged. Private properties and methods may not be accessed or overridden by child classes, which limits the ability of other developers to extend a class to suit their needs.

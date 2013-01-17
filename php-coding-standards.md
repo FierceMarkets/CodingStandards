@@ -25,7 +25,7 @@ PHP code MUST use the long `<?php ?>` tags or the short-echo `<?= ?>` tags; it M
 
 This is the most portable way to include PHP code on differing operating systems and set-ups.  In PHP 5.4 and newer, the short-echo format is guarenteed to be enabled.  It makes the most sense in template files.
 
-Note that the ?> at the end of code files is purposely omitted. This includes module and include files. The reasons for this can be summarized as:
+The `?>` at the end of files containing only PHP MUST be omitted.
 
  > Removing it eliminates the possibility for unwanted    whitespace at the end of files which can cause "header already sent" errors, XHTML/XML validation issues, and other problems.
  > The closing delimiter at the end of a file is optional.
@@ -52,12 +52,11 @@ Blank lines MAY be added to improve readability and to indicate related blocks o
 There MUST NOT be more than one statement per line.
 
 
-
 ## Indenting
 
 Code MUST use an indent of 4 spaces, and MUST NOT use tabs for indenting.
 
-> N.b.: Using only spaces, and not mixing spaces with tabs, helps to avoid
+> Using only spaces, and not mixing spaces with tabs, helps to avoid
 > problems with diffs, patches, history, and annotations. The use of spaces
 > also makes it easy to insert fine-grained sub-indentation for inter-line 
 > alignment.
@@ -66,8 +65,6 @@ Code MUST use an indent of 4 spaces, and MUST NOT use tabs for indenting.
 *Pear* - Use an indent of 4 spaces, with no tabs.
 
 *Drupal* - Use an indent of 2 spaces, with no tabs.
-
-
 
 
 ## Side Effects
@@ -158,15 +155,16 @@ class Fierce_Model_Foo
 
 Opening braces for classes MUST go on the next line, and closing braces MUST go on the next line after the body.
 
-    <?php
-    class Foo_Bar
-    {
-    
-        //... code goes here
-    
-    }
-    ?>
+```php
+<?php
+class Foo_Bar
+{
 
+    //... code goes here
+
+}
+?>
+```
 
 ---
 
@@ -187,9 +185,7 @@ Note that if the class name is a variable, the variable will be evaluated first 
     $foo = new $bar($arg1, $arg2);
 
 
-
 ---
-
 
 
 # Class Constants, Properties, and Methods
@@ -202,7 +198,7 @@ Classes should be given descriptive names. Avoid using abbreviations where possi
 
 
 
-## Extends and Implements
+## `extends` and `implements`
 
 The `extends` and `implements` keywords MUST be declared on the same line as the class name.
 
@@ -240,7 +236,6 @@ class ClassName extends ParentClass implements
     // constants, properties, methods
 }
 ```
-
 
 
 ## `abstract`, `final`, and `static`
@@ -331,9 +326,6 @@ class ClassName
 ```
 
 
-
-
-
 ## Methods
 
 Visibility MUST be declared on all methods.
@@ -400,13 +392,9 @@ class ClassName
 
 
 
-
-
-
-
 ---
 
-## Keywords and True/False/Null
+# Keywords and True/False/Null
 
 PHP [keywords][] MUST be in lower case.
 
@@ -418,7 +406,7 @@ The PHP constants `true`, `false`, and `null` MUST be in lower case.
 
 [keywords]: http://php.net/manual/en/reserved.keywords.php
 
-
+--
 
 # Namespace and Use Declarations
 
@@ -486,52 +474,6 @@ As displayed above, there should be one space on either side of an equals sign u
     $long_variable = foo($baz);
     ?>
 
-To support readability, parameters in subsequent calls to the same function/method may be aligned by parameter name:
-
-    <?php
-    $this->callSomeFunction('param1',     'second',        true);
-    $this->callSomeFunction('parameter2', 'third',         false);
-    $this->callSomeFunction('3',          'verrrrrrylong', true);
-    ?>
-
-
-
-## Split function call on several lines
-
-The CS require lines to have a maximum length of 80 chars. Calling functions or methods with many parameters while adhering to CS is impossible in that cases. It is allowed to split parameters in function calls onto several lines.
-
-    <?php
-    
-    $this->someObject->subObject->callThisFunctionWithALongName(
-        $parameterOne, $parameterTwo,
-        $aVeryLongParameterThree
-    );
-    ?>
-
-Several parameters per line are allowed. Parameters need to be indented 4 spaces compared to the level of the function call. The opening parenthesis is to be put at the end of the function call line, the closing parenthesis gets its own line at the end of the parameters. This shows a visual end to the parameter indentations and follows the opening/closing brace rules for functions and conditionals.
-
-The same applies not only for parameter variables, but also for nested function calls and for arrays.
-
-    <?php
-    
-    $this->someObject->subObject->callThisFunctionWithALongName(
-        $this->someOtherFunc(
-            $this->someEvenOtherFunc(
-                'Help me!',
-                array(
-                    'foo'  => 'bar',
-                    'spam' => 'eggs',
-                ),
-                23
-            ),
-            $this->someEvenOtherFunc()
-        ),
-        $this->wowowowowow(12)
-    );
-    ?>
-
-Nesting those function parameters is allowed if it helps to make the code more readable, not only when it is necessary when the characters per line limit is reached.
-
 ---
 
 # Assignments
@@ -539,7 +481,6 @@ Nesting those function parameters is allowed if it helps to make the code more r
 To support readability, the equal signs MAY be aligned in block-related assignments:
 
     <?php
-    
     $short  = foo($bar);
     $longer = foo($baz);
     ?>
@@ -557,8 +498,6 @@ Assigments may be split onto several lines when the character/line limit would b
 ---
 
 # Function Definitions
-
-## Brace on the same line or on a new line?
 
 *Drupal* - 
     function funstuff_system($field) {
@@ -580,25 +519,9 @@ Assigments may be split onto several lines when the character/line limit would b
 
 *PSR* - Has no opinion on the function definition formatting.
 
-Arguments with default values go at the end of the argument list. Always attempt to return a meaningful value from a function if one is appropriate. Here is a slightly longer example:
+Arguments with default values go at the end of the argument list. Always attempt to return a meaningful value from a function if one is appropriate.
 
-    <?php
-    function connect(&$dsn, $persistent = false)
-    {
-        if (is_array($dsn)) {
-            $dsninfo = &$dsn;
-        } else {
-            $dsninfo = DB::parseDSN($dsn);
-        }
-    
-        if (!$dsninfo || !$dsninfo['phptype']) {
-            return $this->raiseError();
-        }
-    
-        return true;
-    }
-    ?>
-
+---
 
 # Control Structures
 
@@ -734,7 +657,6 @@ In templates (ex. .tpl.php files), the alternate control statement syntax using 
 
 
 
-
 # Closures
 
 Closures MUST be declared with a space after the `function` keyword, and a space before and after the `use` keyword.
@@ -827,7 +749,6 @@ $foo->bar(
 ```
 
 
-
 ---
 
 # Operators
@@ -876,10 +797,13 @@ Note that if the line declaring an array spans longer than 80 characters (often 
 
 Note the comma at the end of the last array element; This is not a typo! It helps prevent parsing errors if another element is placed at the end of the list later.
 
+Starting with PHP 5.4, shorthand `[]` syntax MAY be used.
 
 ---
 
 # Comments
+
+Documentation standards might be coming soon.
 
 Non-documentation comments are strongly encouraged. A general rule of thumb is that if you look at a section of code and think "Wow, I don't want to try and describe that", you need to comment it before you forget how it works.
 
@@ -889,24 +813,26 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 # Including Code
 
-Anywhere you are unconditionally including a class file, use require_once(). Anywhere you are conditionally including a class file (for example, factory methods), use include_once(). Either of these will ensure that class files are included only once. They share the same file list, so you don't need to worry about mixing them - a file included with require_once() will not be included again by include_once().
+Anywhere you are unconditionally including a class file, use `require_once`. Anywhere you are conditionally including a class file (for example, factory methods), use `include_once`. Either of these will ensure that class files are included only once. They share the same file list, so you don't need to worry about mixing them - a file included with `require_once` will not be included again by `include_once`.
 
-Note: include_once() and require_once() are statements, not functions. Parentheses should not surround the subject filename.
+Note: `include_once` and `require_once` are statements, not functions. Parentheses should not surround the subject filename.
 
 When including code from the same directory or a sub-directory, start the file path with ".":
 
     include_once ./includes/mymodule_formatting.inc
 
 In Drupal 7.x and later versions, use DRUPAL_ROOT:
-require_once DRUPAL_ROOT . '/' . variable_get('cache_inc', 'includes/cache.inc');
 
-For new projects when you're not using autoloading, you should define an APP_ROOT for this purpose.
+    require_once DRUPAL_ROOT . '/' . variable_get('cache_inc', 'includes/cache.inc');
+
+For new projects when you're not using autoloading, you should create an `APP_ROOT` constant for this purpose.
 
 ---
 
 
 # Semicolons
-The PHP language requires semicolons at the end of most lines, but allows them to be omitted at the end of code blocks. Drupal coding standards require them, even at the end of code blocks. In particular, for one-line PHP blocks:
+
+Semicolons that are optional in PHP are required in this standard.
 
     <?php print $tax; ?> -- YES
     <?php print $tax ?> -- NO
@@ -916,7 +842,8 @@ The PHP language requires semicolons at the end of most lines, but allows them t
 
 
 # Quotes
-There's no hard standard on double quotes versus single quotes.  Stay consistent.
+
+There's no hard standard on double quotes versus single quotes.  But stay consistent.
 
 The rule of thumb is single quote strings are known to be faster because the parser doesn't have to look for in-line variables. Their use is recommended except in two cases:
 
@@ -957,14 +884,6 @@ Persistent variables (variables/settings defined using Drupal's variable_get()/v
 
 ---
 
-# Global Variables
-
-If your package needs to define global variables, their names should start with a single underscore followed by the package/module name and another underscore. For example, the PEAR package uses a global variable called 
-
-    $_PEAR_destructor_object_list.
-
----
-
 # Global Functions
 
 *Pear* - Global functions should be named using the "studly caps" style (also referred to as "bumpy case" or "camel caps"). In addition, they should have the package name as a prefix, to avoid name collisions between packages. The initial letter of the name (after the prefix) is lowercase, and each letter that starts a new "word" is capitalized. An example:
@@ -1001,10 +920,8 @@ Note that const does not work with PHP expressions. define() should be used when
     ?>
 ---
 
+# Readability of code blocks
 
-# Some Best practices from Pear
-
-## Readability of code blocks
 Related lines of code should be grouped into blocks, separated from each other to keep readability as high as possible. The definition of "related" depends on the code :)
 
 For example:
@@ -1039,7 +956,9 @@ is a lot easier to read when separated:
     }
     ?>
 
-## Return early
+---
+
+# Return early
 
 To keep readability in functions and methods, it is wise to return early if simple conditions apply that can be checked at the beginning of a method:
 
@@ -1106,20 +1025,78 @@ It's better to return early, keeping indentation and brain power needed to follo
 
 ---
 
-# Nice-to-have - Class-to-file convention
+# Class-to-file convention
 
-All public classes must be in their own file with underscores (_) or namespace separators (\) replaced by directory separator, so that PEAR2_PackageName_Base class or PEAR2\PackageName\Base class is always located in PEAR2/PackageName/Base.php (this is required to make autoload work)
+All public classes SHOULD be in their own file with underscores (_) or namespace separators (\) replaced by directory separator, so that `PEAR2_PackageName_Base` class or `PEAR2\PackageName\Base` class is always located in `PEAR2/PackageName/Base.php`.
 
 ---
 
-# Base Exception class
 
-Each package SHOULD define a base class that is packagename_Exception. For example, the PEAR2\PackageName class defines an exception as follows in PEAR2/PackageName/Exception.php:
+# PHP Exceptions
+
+## Base Exception Class
+
+Each package SHOULD define a base class that is packagename_Exception. For example, the `PEAR2\PackageName` class defines an exception as follows in `PEAR2/PackageName/Exception.php`:
 
     <?php
     namespace PEAR2\PackageName;
     class Exception extends \Exception {}
     ?>
+
+
+## Exception conventions
+
+As Exceptions are classes, they should follow all coding standards for object-oriented code like any other class.
+All Exceptions MUST end with the suffix "Exception".
+
+Exception classes SHOULD be named for the subsystem to which they relate, and the type of error. That is, [Subsystem][ErrorType]Exception.
+
+The use of subclassed Exceptions is preferred over reusing a single generic exception class with different error messages as different classes may then be caught separately.
+
+Example:
+
+    <?php
+    class WidgetNotFoundException extends Exception {}
+    
+    function use_widget($widget_name) {
+      $widget = find_widget($widget_name);
+    
+      if (!$widget) {
+        throw new WidgetNotFoundException(t('Widget %widget not found.', array('%widget' => $widget_name)));
+      }
+    }
+    ?>
+
+
+## Exception Inheritance
+
+PHP requires that all exceptions inherit off of the Exception class, either directly or indirectly.
+
+When creating a new exception class, it should be named according to the subsystem they relate to and the error message they involve. If a given subsystem includes multiple exceptions, they should all extend from a common base exception. That allows for multiple catch blocks as necessary.
+
+    <?php
+    class FelineException extends Exception {}
+    
+    class FelineHairBallException extends FelineException {}
+    
+    class FelineKittenTooCuteException extends FelineException {}
+    
+    try {
+      $nermal = new Kitten();
+      $nermal->playWith($string);
+    }
+    catch (FelineHairBallException $e) {
+      // Do error handling here.
+    }
+    catch (FelineKittenTooCuteException $e) {
+      // Do different error handling here.
+    }
+    catch (FelineException $e) {
+      // Do generic error handling here.
+    }
+    // Optionally also catch Exception so that all exceptions stop here instead of propagating up.
+    ?>
+
 
 ---
 
@@ -1194,64 +1171,6 @@ Using fluent application programming interfaces often leads to many concatenated
         ->someOtherFunc(23, 42)
         ->andAThirdFunction();
     ?>
-
----
-
-# PHP Exceptions
-
-## Basic Exception conventions
-
-As Exceptions are classes, they should follow all coding standards for object-oriented code like any other class.
-All Exceptions MUST end with the suffix "Exception".
-
-Exception classes SHOULD be named for the subsystem to which they relate, and the type of error. That is, [Subsystem][ErrorType]Exception.
-
-The use of subclassed Exceptions is preferred over reusing a single generic exception class with different error messages as different classes may then be caught separately.
-
-Example:
-
-    <?php
-    class WidgetNotFoundException extends Exception {}
-    
-    function use_widget($widget_name) {
-      $widget = find_widget($widget_name);
-    
-      if (!$widget) {
-        throw new WidgetNotFoundException(t('Widget %widget not found.', array('%widget' => $widget_name)));
-      }
-    }
-    ?>
-
-
-## Exception Inheritance
-
-PHP requires that all exceptions inherit off of the Exception class, either directly or indirectly.
-
-When creating a new exception class, it should be named according to the subsystem they relate to and the error message they involve. If a given subsystem includes multiple exceptions, they should all extend from a common base exception. That allows for multiple catch blocks as necessary.
-
-    <?php
-    class FelineException extends Exception {}
-    
-    class FelineHairBallException extends FelineException {}
-    
-    class FelineKittenTooCuteException extends FelineException {}
-    
-    try {
-      $nermal = new Kitten();
-      $nermal->playWith($string);
-    }
-    catch (FelineHairBallException $e) {
-      // Do error handling here.
-    }
-    catch (FelineKittenTooCuteException $e) {
-      // Do different error handling here.
-    }
-    catch (FelineException $e) {
-      // Do generic error handling here.
-    }
-    // Optionally also catch Exception so that all exceptions stop here instead of propagating up.
-    ?>
-
 
 
 ---
@@ -1344,7 +1263,7 @@ The function isset() returns TRUE when the variable is set to 0, but FALSE if th
 
 
 # Casting
-Put a space between the (type) and the $variable in a cast: (int) $mynumber.
+Put a space between the (type) and the $variable in a cast: `(int) $mynumber`.
 
 ---
 
@@ -1355,9 +1274,7 @@ For example, use implode() instead of join(). See http://php.net/manual/en/alias
 
 ---
 
-
-
-## Class Member Visibility
+# Class Member Visibility
 
 The use of public properties is strongly discouraged, as it allows for unwanted side effects. It also exposes implementation specific details, which in turn makes swapping out a class for another implementation (one of the key reasons to use objects) much harder. Properties should be considered internal to a class.
 

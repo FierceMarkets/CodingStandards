@@ -825,14 +825,6 @@ $foo->bar(
     $arg3
 );
 ```
---
-
-
-
-
-
-
-
 
 
 
@@ -842,11 +834,11 @@ $foo->bar(
 
 ## Unary Operators
 
-Unary operators (operators that operate on only one value), such as ++, should not have a space between the operator and the variable or number they are operating on.
+Unary operators (operators that operate on only one value), such as ++, should not have a space between the operator and the variable or number they are operating on.  Ex. `$count++;`
 
 ## Binary Operators
 
-All binary operators (operators that come between two values), such as +, -, =, !=, ==, >, etc. should have a space before and after the operator, for readability. For example, an assignment should be formatted as $foo = $bar; rather than $foo=$bar;. 
+All binary operators (operators that come between two values), such as +, -, =, !=, ==, >, etc. should have a space before and after the operator, for readability. For example, an assignment should be formatted as `$foo = $bar;` rather than `$foo=$bar;`. 
 
 ## Ternary operator
 
@@ -888,8 +880,6 @@ Note the comma at the end of the last array element; This is not a typo! It help
 ---
 
 # Comments
-
-Sorry Mario, the Commenting standards are in another document.
 
 Non-documentation comments are strongly encouraged. A general rule of thumb is that if you look at a section of code and think "Wow, I don't want to try and describe that", you need to comment it before you forget how it works.
 
@@ -961,86 +951,6 @@ When using the concatenating assignment operator ('.='), use a space on each sid
 
 ---
 
-# Header Comment Blocks
-All source code files in the PEAR repository shall contain a "page-level" docblock at the top of each file and a "class-level" docblock immediately above each class. Below are examples of such docblocks.
-
-    <?php
-    
-    /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-    
-    /**
-     * Short description for file
-     *
-     * Long description for file (if any)...
-     *
-     * PHP version 5
-     *
-     * LICENSE: This source file is subject to version 3.01 of the PHP license
-     * that is available through the world-wide-web at the following URI:
-     * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
-     * the PHP License and are unable to obtain it through the web, please
-     * send a note to license@php.net so we can mail you a copy immediately.
-     *
-     * @category   CategoryName
-     * @package    PackageName
-     * @author     Original Author <author@example.com>
-     * @author     Another Author <another@example.com>
-     * @copyright  1997-2005 The PHP Group
-     * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
-     * @version    SVN: $Id$
-     * @link       http://pear.php.net/package/PackageName
-     * @see        NetOther, Net_Sample::Net_Sample()
-     * @since      File available since Release 1.2.0
-     * @deprecated File deprecated in Release 2.0.0
-     */
-    
-    /*
-    * Place includes, constant defines and $_GLOBAL settings here.
-    * Make sure they have appropriate docblocks to avoid phpDocumentor
-    * construing they are documented by the page-level docblock.
-    */
-    
-    /**
-     * Short description for class
-     *
-     * Long description for class (if any)...
-     *
-     * @category   CategoryName
-     * @package    PackageName
-     * @author     Original Author <author@example.com>
-     * @author     Another Author <another@example.com>
-     * @copyright  1997-2005 The PHP Group
-     * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
-     * @version    Release: @package_version@
-     * @link       http://pear.php.net/package/PackageName
-     * @see        NetOther, Net_Sample::Net_Sample()
-     * @since      Class available since Release 1.2.0
-     * @deprecated Class deprecated in Release 2.0.0
-     */
-    class Foo_Bar
-    {
-    }
-    
-    ?>
-
-## Required Tags That Have Variable Content
-### Short Descriptions
-Short descriptions must be provided for all docblocks. They should be a quick sentence, not the name of the item. Please read the Coding Standard's Sample File about how to write good descriptions.
-
-### @deprecated
-This tag is required when a file or class is no longer used but has been left in place for backwards compatibility.
-
-## Optional Tags
-
-### @see
-Add a @see tag when you want to refer users to other sections of the package's documentation. If you have multiple items, separate them with commas rather than adding multiple @see tags.
-
-## Order and Spacing
-
-To ease long term readability of PEAR source code, the text and tags must conform to the order and spacing provided in the example above. This standard is adopted from the JavaDoc standard.
-
----
-
 # Persistent Variables in Drupal
 
 Persistent variables (variables/settings defined using Drupal's variable_get()/variable_set() functions) should be named using all lowercase letters, and words should be separated with an underscore. They should use the grouping/module name as a prefix, to avoid name collisions between modules.
@@ -1068,13 +978,12 @@ If your package needs to define global variables, their names should start with 
 
 # Global Constants
 
-
 Constants should always be all-uppercase, with underscores to separate words. Prefix constant names with the uppercased name of the class/package/module they are used in. Some examples:
 
     DB_DATASOURCENAME
     SERVICES_AMAZON_S3_LICENSEKEY
 
-In Drupal 8 and later, constants should be defined using the const PHP language keyword (instead of define()), because it is better for performance:
+In PHP 5.3 and later, constants should be defined using the const PHP language keyword (instead of define()), because it is better for performance:
 
     <?php
     /**
@@ -1093,8 +1002,7 @@ Note that const does not work with PHP expressions. define() should be used when
 ---
 
 
-# Best practices from Pear
-There are other things not covered by PEAR Coding Standards which are mostly subject of personal preference and not directly related to readability of the code. Things like "single quotes vs double quotes" are features of PHP itself to make programming easier and there are no reasons not use one way in preference to another. Such best practices are left solely on developer to decide. The only recommendation could be made to keep consistency within package and respect personal style of other developers.
+# Some Best practices from Pear
 
 ## Readability of code blocks
 Related lines of code should be grouped into blocks, separated from each other to keep readability as high as possible. The definition of "related" depends on the code :)
@@ -1206,7 +1114,7 @@ All public classes must be in their own file with underscores (_) or namespace s
 
 # Base Exception class
 
-Each package must define a base class that is packagename_Exception. For example, the PEAR2\PackageName class defines an exception as follows in PEAR2/PackageName/Exception.php:
+Each package SHOULD define a base class that is packagename_Exception. For example, the PEAR2\PackageName class defines an exception as follows in PEAR2/PackageName/Exception.php:
 
     <?php
     namespace PEAR2\PackageName;
@@ -1229,32 +1137,9 @@ Inside optional component loading methods (like factory or driver loading, etc.)
 
 ---
 
-# Class Aliasing
-
-PHP allows classes to be aliased when they are imported into a namespace. In general that should only be done to avoid a name collision. If a collision happens, alias both colliding classes by prefixing the next higher portion of the namespace.
-
-Example:
-
-    <?php
-    use Foo\Bar\Baz as BarBaz;
-    use Stuff\Thing\Baz as ThingBaz;
-    
-    /**
-     * Tests stuff for the whichever.
-     */
-    function test() {
-      $a = new BarBaz(); // This will be Foo\Bar\Baz
-      $b = new ThingBaz(); // This will be Stuff\Thing\Baz
-    }
-    ?>
-
-That helps keep clear which one is which, and where it comes from. Aliasing should only be done to avoid name collisions.
-
----
-
 # Type Hinting
 
-Introduced in PHP 5.3. It only applies to arrays, classes, and interfaces, not to the primitive types (int, float, double, string).
+Introduced in PHP 5.3. It only applies to arrays, classes, and interfaces, not to the primitive types (int, float, double, string).  PHP 5.4 adds support for the `callable` type.
 
 PHP supports optional type specification for function and method parameters for classes and arrays. Although called "type hinting" it does make a type required, as passing an object that does not conform to that type will result in a fatal error.
 
@@ -1301,8 +1186,6 @@ PHP allows objects returned from functions and methods to be "chained", that is,
 
 As a general rule, a method should return $this, and thus be chainable, in any case where there is no other logical return value. Common examples are those methods that set some state or property on the object. It is better in those cases to return $this rather than TRUE/FALSE or NULL.
 
-
-
 Using fluent application programming interfaces often leads to many concatenated function calls. Those calls may be split onto several lines. When doing this, all subsequent lines are indented by 4 spaces and begin with the "->" arrow.
 
     <?php
@@ -1319,9 +1202,10 @@ Using fluent application programming interfaces often leads to many concatenated
 ## Basic Exception conventions
 
 As Exceptions are classes, they should follow all coding standards for object-oriented code like any other class.
-All Exceptions must end with the suffix "Exception".
-All Exceptions must include an appropriate translated string as a message, unless the Exception is thrown very early in the bootstrap process before the translation system is available. That is extremely rare.
-Exception classes should be named for the subsystem to which they relate, and the type of error. That is, [Subsystem][ErrorType]Exception.
+All Exceptions MUST end with the suffix "Exception".
+
+Exception classes SHOULD be named for the subsystem to which they relate, and the type of error. That is, [Subsystem][ErrorType]Exception.
+
 The use of subclassed Exceptions is preferred over reusing a single generic exception class with different error messages as different classes may then be caught separately.
 
 Example:
@@ -1376,13 +1260,12 @@ When creating a new exception class, it should be named according to the subsyst
 
 # Error Levels
 
-## Pear - E_STRICT-compatible code
-Starting on 01 January 2007, all new code that is suggested for inclusion into PEAR must be E_STRICT-compatible. This means that it must not produce any warnings or errors when PHP's error reporting level is set to E_ALL | E_STRICT.
+## Pear - E_STRICT
 
+Pear requires that code be E_STRICT-compatible. This means that it must not produce any warnings or errors when PHP's error reporting level is set to E_ALL | E_STRICT.
 
-## Drupal - Write E_ALL compliant code
+## Drupal - E_ALL
 
-Adjusting the error reporting level
 Drupal 6.x releases ignore E_NOTICE, E_STRICT, and E_DEPRECATED notices for the benefit of production sites. To view all PHP errors on development or testing sites, you may change includes/common.inc from:
 
     <?php
@@ -1479,3 +1362,4 @@ For example, use implode() instead of join(). See http://php.net/manual/en/alias
 The use of public properties is strongly discouraged, as it allows for unwanted side effects. It also exposes implementation specific details, which in turn makes swapping out a class for another implementation (one of the key reasons to use objects) much harder. Properties should be considered internal to a class.
 
 The use of private methods or properties is strongly discouraged. Private properties and methods may not be accessed or overridden by child classes, which limits the ability of other developers to extend a class to suit their needs.
+
